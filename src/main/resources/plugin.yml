@@ -1,0 +1,10 @@
+name: VaroX
+version: '1.0.0'
+main: de.jozelot.varoX.VaroX
+api-version: '1.8.8'
+authors: [ jozelot_ ]
+website: www.jozelot.de
+
+permissions:
+  varox.admin:
+    default: op
