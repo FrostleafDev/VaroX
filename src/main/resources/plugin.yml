@@ -5,6 +5,12 @@ api-version: '1.8.8'
 authors: [ jozelot_ ]
 website: www.jozelot.de
 
+commands:
+  varo:
+    description: Main command to manage the VaroX plugin!
+    aliases: vr
+    permission: varox.admin
+
 permissions:
   varox.admin:
     default: op

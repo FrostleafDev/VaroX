@@ -1,1 +1,6 @@
 # Configuration file
+
+version: 1.0.0
+locale: de
+
+varo-name: 'Varo 4'
