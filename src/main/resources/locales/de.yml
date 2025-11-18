@@ -14,6 +14,15 @@ command-varo-end-fail: '§c{varo_name} kann nicht beendet werden, da es nicht ge
 command-varo-end-kick: '§4{varo_name} wurde frühzeitig vom einem Admin beendet.'
 
 # /varo open
+command-varo-open-already-end: '§c{varo_name} wurde bereits beendet'
+command-varo-open-already: '§c{varo_} ist bereits offen'
+command-varo-open: '§e{varo_name} wurde geöffnet. Die Spieler können nun beitreten'
+
+# /varo close
+command-varo-close-ended: '§c{varo_name} ist schon beendet'
+command-varo-close-closed: '§c{varo_name} wurde noch nicht geöffnet'
+command-varo-close-started: '§c{varo'
+
 
 
 varo-starting: '§e{varo_name} startet in {seconds} Sekunden'
