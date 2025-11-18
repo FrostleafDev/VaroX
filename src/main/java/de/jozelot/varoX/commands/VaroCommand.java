@@ -1,10 +1,7 @@
 package de.jozelot.varoX.commands;
 
 import de.jozelot.varoX.VaroX;
-import de.jozelot.varoX.manager.ConfigManager;
-import de.jozelot.varoX.manager.FileManager;
-import de.jozelot.varoX.manager.LangManager;
-import de.jozelot.varoX.manager.StatesManager;
+import de.jozelot.varoX.manager.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -16,6 +13,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.io.BukkitObjectInputStream;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class VaroCommand implements CommandExecutor {
 
     private final ConfigManager config;
@@ -23,13 +23,15 @@ public class VaroCommand implements CommandExecutor {
     private final FileManager fileManager;
     private final StatesManager statesManager;
     private final VaroX plugin;
+    private final WorldBorderManager worldBorderManager;
 
-    public VaroCommand(ConfigManager config, LangManager lang, FileManager fileManager, StatesManager statesManager, VaroX plugin) {
+    public VaroCommand(ConfigManager config, LangManager lang, FileManager fileManager, StatesManager statesManager, VaroX plugin, WorldBorderManager worldBorderManager) {
         this.config = config;
         this.lang = lang;
         this.fileManager = fileManager;
         this.statesManager = statesManager;
         this.plugin = plugin;
+        this.worldBorderManager = worldBorderManager;
     }
 
     private boolean varoStarting = false;
@@ -38,81 +40,87 @@ public class VaroCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (!sender.hasPermission("varox.admin")) {
-            sender.sendMessage("§cDu hast dazu keine Rechte!");
+            sender.sendMessage(lang.getNoPermission());
             return true;
         }
 
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("start")) {
                 if (varoStarting) {
-                    sender.sendMessage("§cDas Varo ist schon am starten!");
+                    sender.sendMessage(lang.getCommandVaroStartAlready());
                     return true;
                 }
                 if (statesManager.getGameState() == 0) {
-                    sender.sendMessage("§cDas Varo befindet sich noch in der Vorbereitung! Nutze /varo open und danach start!");
+                    sender.sendMessage(lang.getCommandVaroStartPrephase());
                     return true;
                 }
                 if (statesManager.getGameState() == 2) {
-                    sender.sendMessage("§cDas Varo läuft bereits!");
+                    sender.sendMessage(lang.getCommandVaroStartRunning());
                     return true;
                 }
                 if (statesManager.getGameState() == 3) {
-                    sender.sendMessage("§cDas Varo wurde beendet!");
+                    sender.sendMessage(lang.getCommandVaroStartStopped());
                     return true;
                 }
-                sender.sendMessage("§aDas Varo wurde in den Start Modus versätzt!");
+                sender.sendMessage(lang.getCommandVaroStartSuccess());
                 varoStarting = true;
+                worldBorderManager.startWorldBorderSystem();
                 startVaro();
+                return true;
             }
             if (args[0].equalsIgnoreCase("end")) {
                 if (statesManager.getGameState() == 3) {
-                    sender.sendMessage("§cDas Varo wurde bereits beendet!");
+                    sender.sendMessage(lang.getCommandVaroEndAlready());
                     return true;
                 }
                 if (statesManager.getGameState() == 0 || statesManager.getGameState() == 1) {
-                    sender.sendMessage("§cDu kannst das Varo nicht beenden bevor es begonnen hat!");
+                    sender.sendMessage(lang.getCommandVaroEndFail());
                     return true;
                 }
                 statesManager.setGameState(3);
+                worldBorderManager.getBorderTask().cancel();
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    player.kickPlayer("§4Varo 4 wurde frühzeitig beendet.");
+                    player.kickPlayer(lang.getCommandVaroEndKick());
                 }
+                return true;
             }
             if (args[0].equalsIgnoreCase("open")) {
                 if (statesManager.getGameState() == 3) {
-                    sender.sendMessage("§cDas Varo wurde bereits beendet!");
+                    sender.sendMessage(lang.getCommandVaroOpenAlreadyEnd());
                     return true;
                 }
                 if (statesManager.getGameState() == 1 || statesManager.getGameState() == 2) {
-                    sender.sendMessage("§cDas Varo ist bereits geöffnet!");
+                    sender.sendMessage(lang.getCommandVaroOpenAlready());
                     return true;
                 }
                 statesManager.setGameState(1);
-                sender.sendMessage("§aVaro 4 wurde geöffnet!");
+                sender.sendMessage(lang.getCommandVaroOpen());
+                return true;
             }
             if (args[0].equalsIgnoreCase("close")) {
                 if (statesManager.getGameState() == 3) {
-                    sender.sendMessage("§cDas Varo wurde bereits beendet!");
+                    sender.sendMessage(lang.getCommandVaroCloseEnded());
                     return true;
                 }
                 if (statesManager.getGameState() == 0) {
-                    sender.sendMessage("§cDas Varo ist nicht offen!");
+                    sender.sendMessage(lang.getCommandVaroCloseClosed());
                     return true;
                 }
                 if (statesManager.getGameState() == 2) {
-                    sender.sendMessage("§cDas Varo hat bereits gestartet!");
+                    sender.sendMessage(lang.getCommandVaroCloseStarted());
                     return true;
                 }
                 statesManager.setGameState(0);
-                sender.sendMessage("§aVaro 4 wurde geschlossen!");
+                sender.sendMessage(lang.getCommandVaroClose());
+                return true;
             }
             if (args[0].equalsIgnoreCase("reset")) {
                 statesManager.setGameState(0);
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (!player.hasPermission("varox.admin")) {
-                        player.kickPlayer("§4Varo 4 wurde frühzeitig beendet.");
+                        player.kickPlayer(lang.getCommandVaroResetUser());
                     }
-                    else { player.kickPlayer("§cVaro 4 wurde frühzeitig beendet und zurückgesetzt.\n §4Du musst jetzt die 3 Welten Ordner löschen!");}
+                    else { player.kickPlayer(lang.getCommandVaroResetAdminFirst() + "\n" + lang.getCommandVaroResetAdminSecond());}
                 }
                 new BukkitRunnable() {
                     @Override
@@ -120,9 +128,25 @@ public class VaroCommand implements CommandExecutor {
                         Bukkit.shutdown();
                     }
                 }.runTaskLater(plugin, 1L);
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("reload")) {
+                reloadPlugin();
+                sender.sendMessage(lang.getCommandVaroReloadSuccess());
             }
         }
+        sendHelpMessage(sender);
         return true;
+    }
+
+    private void reloadPlugin() {
+        config.load();
+        lang.load();
+        fileManager.saveFiles();
+    }
+
+    private void sendHelpMessage(CommandSender sender) {
+        sender.sendMessage("Herlp");
     }
 
     private void startVaro() {
@@ -134,7 +158,7 @@ public class VaroCommand implements CommandExecutor {
             @Override
             public void run() {
                 if (timeLeft <= 0) {
-                    Bukkit.broadcastMessage(ChatColor.GREEN + "Mögen die Spiele beginnen!");
+                    Bukkit.broadcastMessage(lang.getVaroStart());
 
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         player.playSound(player.getLocation(), Sound.NOTE_PLING, 1f, 1f);
@@ -147,7 +171,12 @@ public class VaroCommand implements CommandExecutor {
                 }
 
                 if (timeLeft == 60 || timeLeft == 30 || timeLeft == 20 || timeLeft == 15 || timeLeft == 10 || timeLeft <= 5) {
-                    Bukkit.broadcastMessage(ChatColor.YELLOW + config.getVaroName() + " beginnt in " + timeLeft + " Sekunden");
+
+                    Map<String, String> vars = new HashMap<>();
+                    vars.put("seconds", String.valueOf(timeLeft));
+
+                    Bukkit.broadcastMessage(lang.format("varo-starting", vars));
+
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         player.playSound(player.getLocation(), Sound.NOTE_BASS, 1f, 1f);
                     }

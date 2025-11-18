@@ -1,6 +1,33 @@
 # Configuration file
 
+
+#
+# Information
+# Server darf restarten
+
 version: 1.0.0
 locale: de
 
 varo-name: 'Varo 4'
+
+
+#
+# Worderboarder Settings
+# Movt in Nether 8mal so schnell! Bedenken
+varo_start_border_size: 2000
+varo_center_x: 0
+varo_center_z: 0
+
+border_phases:
+  '1':
+    delay_seconds: 60
+    target_size: 1000
+    duration_seconds: 60
+  '2':
+    delay_seconds: 60
+    target_size: 100
+    duration_seconds: 60
+  '3':
+    delay_seconds: 60
+    target_size: 10
+    duration_seconds: 60

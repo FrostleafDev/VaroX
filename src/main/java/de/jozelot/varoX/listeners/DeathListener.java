@@ -1,5 +1,6 @@
 package de.jozelot.varoX.listeners;
 
+import de.jozelot.varoX.manager.LangManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -22,9 +23,11 @@ public class DeathListener implements Listener {
     private final long TIMEOUT_SECONDS = 10; // Hinweis: Wert sollte aus Config kommen
     private final JavaPlugin plugin;
     private final Set<UUID> waitingForKick = new HashSet<>();
+    private final LangManager lang;
 
-    public DeathListener(JavaPlugin plugin) {
+    public DeathListener(JavaPlugin plugin, LangManager lang) {
         this.plugin = plugin;
+        this.lang = lang;
     }
 
     private static class CombatInfo {
@@ -80,7 +83,10 @@ public class DeathListener implements Listener {
 
         event.setDeathMessage(null);
 
-        String fallbackMessage = "§e" + victim.getName() + " §7ist gestorben.";
+        Map<String, String> deathStandart = new HashMap<>();
+        deathStandart.put("player_name", String.valueOf(victim.getName()));
+
+        String fallbackMessage = lang.format("death-standart", deathStandart);
 
         String finalDeathMessage = fallbackMessage;
 
@@ -95,7 +101,12 @@ public class DeathListener implements Listener {
                 Player killer = Bukkit.getPlayer(info.getDamagerUUID());
 
                 if (killer != null && killer.isOnline()) {
-                    finalDeathMessage = "§e" + victim.getName() + " §7wurde von §e" + killer.getName() + "§7 getötet";
+
+                    Map<String, String> deathByPlayer = new HashMap<>();
+                    deathByPlayer.put("player_name", String.valueOf(victim.getName()));
+                    deathByPlayer.put("killer_name", String.valueOf(killer.getName()));
+
+                    finalDeathMessage = lang.format("death-by-player", deathByPlayer);
                     killerFound = true;
                 }
             }
@@ -117,7 +128,7 @@ public class DeathListener implements Listener {
             @Override
             public void run() {
                 if (waitingForKick.contains(victimUUID)) {
-                    victim.kickPlayer("§4Du bist gestorben. §cDamit bist du aus §eVaro 4 §causgeschieden");
+                    victim.kickPlayer(lang.getDeathKickMessage());
                 }
             }
         }.runTaskLater(plugin, 100L);
@@ -127,7 +138,7 @@ public class DeathListener implements Listener {
         Player player = event.getPlayer();
         if (waitingForKick.contains(player.getUniqueId())) {
             waitingForKick.remove(player.getUniqueId());
-            player.kickPlayer("§4Du bist gestorben. §cDamit bist du aus §eVaro 4 §causgeschieden");
+            player.kickPlayer(lang.getDeathKickMessage());
         }
     }
     @EventHandler

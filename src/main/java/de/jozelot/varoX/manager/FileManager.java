@@ -22,6 +22,7 @@ public class FileManager {
     public FileManager(JavaPlugin plugin) {
         this.plugin = plugin;
     }
+
     public void saveFiles() {
         saveDefaultLocales();
 

@@ -1,5 +1,6 @@
 package de.jozelot.varoX.listeners;
 
+import de.jozelot.varoX.manager.LangManager;
 import de.jozelot.varoX.manager.StatesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,18 +21,22 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class JoinLeaveListener implements Listener {
 
     private final StatesManager statesManager;
+    private final LangManager lang;
     private final JavaPlugin plugin;
 
     private List<Player> playerInJoin = new ArrayList<>();
 
-    public JoinLeaveListener(StatesManager statesManager, JavaPlugin plugin) {
+    public JoinLeaveListener(StatesManager statesManager, JavaPlugin plugin, LangManager lang) {
         this.statesManager = statesManager;
         this.plugin = plugin;
+        this.lang = lang;
     }
 
     @EventHandler
@@ -41,7 +46,17 @@ public class JoinLeaveListener implements Listener {
             playerInJoin.add(event.getPlayer());
         }
         if (statesManager.getGameState() != 2) {
-            event.setJoinMessage("§e" + event.getPlayer().getName() + "§3 hat den Server betreten");
+            Map<String, String> vars = new HashMap<>();
+            vars.put("player_name", String.valueOf(event.getPlayer().getName()));
+            event.setJoinMessage(lang.format("player-join", vars));
+        }
+        if (event.getPlayer().hasPermission("varox.admin")) {
+            if (statesManager.getGameState() == 0) {
+                event.getPlayer().sendMessage(lang.getInfoAdminStatePrephase());
+            }
+            if (statesManager.getGameState() == 1) {
+                event.getPlayer().sendMessage(lang.getInfoAdminStateOpen());
+            }
         }
     }
 
@@ -51,17 +66,9 @@ public class JoinLeaveListener implements Listener {
 
         if (!player.hasPermission("varox.admin")) {
             if (statesManager.getGameState() == 0) {
-                event.disallow(PlayerLoginEvent.Result.KICK_OTHER,"§4Varo 4 hat noch nicht begonnen.");
+                event.disallow(PlayerLoginEvent.Result.KICK_OTHER,lang.getPlayerJoinFailClosed());
             } else if (statesManager.getGameState() == 3) {
-                event.disallow(PlayerLoginEvent.Result.KICK_OTHER,"§4Varo 4 ist schon vorbei. §cDanke fürs Mitspielen.");
-            }
-        }
-        else {
-            if (statesManager.getGameState() == 0) {
-                player.sendMessage("§eDas Varo befindet sich in der Vorbereitungsphase.");
-            }
-            if (statesManager.getGameState() == 1) {
-                player.sendMessage("§eDas Varo ist offen und kann ab jetzt gestartet werden.");
+                event.disallow(PlayerLoginEvent.Result.KICK_OTHER,lang.getPlayerJoinFailEnded());
             }
         }
     }
@@ -71,7 +78,9 @@ public class JoinLeaveListener implements Listener {
         if (playerInJoin.contains(event.getPlayer())) {
             playerInJoin.remove(event.getPlayer());
         }
-        event.setQuitMessage("§e" + event.getPlayer().getName() + "§3 hat den Server verlassen");
+        Map<String, String> vars = new HashMap<>();
+        vars.put("player_name", String.valueOf(event.getPlayer().getName()));
+        event.setQuitMessage(lang.format("player-leave", vars));
     }
 
     @EventHandler
@@ -161,7 +170,7 @@ public class JoinLeaveListener implements Listener {
                     this.cancel();
                 }
                 if (timeLeft <= 0) {
-                    player.sendMessage("§cDu bist nun verwundbar");
+                    player.sendMessage(lang.getLoginFinish());
                     playerInJoin.remove(player);
 
                     this.cancel();
@@ -169,13 +178,20 @@ public class JoinLeaveListener implements Listener {
                 }
 
                 if (timeLeft == 10) {
-                    Bukkit.broadcastMessage("§e" + player.getName() + "§3 hat den Server betreten und ist in §e10§3 Sekunden angreifbar");
+                    Map<String, String> vars = new HashMap<>();
+                    vars.put("player_name", String.valueOf(player.getName()));
+                    Bukkit.broadcastMessage(lang.format("login-10-second", vars));
                 }
                 if (timeLeft == 3 || timeLeft == 2) {
-                    Bukkit.broadcastMessage("§e" + player.getName() + "§3 ist in §e" + timeLeft + "§3 Sekunden angreifbar");
+                    Map<String, String> vars = new HashMap<>();
+                    vars.put("player_name", String.valueOf(player.getName()));
+                    vars.put("seconds", String.valueOf(timeLeft));
+                    Bukkit.broadcastMessage(lang.format("login-3-2-second", vars));
                 }
                 if (timeLeft == 1) {
-                    Bukkit.broadcastMessage("§e" + player.getName() + "§3 ist in §eeiner§3 Sekunde angreifbar");
+                    Map<String, String> vars = new HashMap<>();
+                    vars.put("player_name", String.valueOf(player.getName()));
+                    Bukkit.broadcastMessage(lang.format("login-1-second", vars));
                 }
 
                 timeLeft--;

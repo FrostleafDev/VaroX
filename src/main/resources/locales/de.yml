@@ -6,7 +6,7 @@ command-varo-start-already: '§c{varo_name} startet schon'
 command-varo-start-prephase: "§c{varo_name} befindet sich noch in der Vorbereitung. Nutze '/varo open' um es zu öffnen"
 command-varo-start-running: '§c{varo_name} ist schon am laufen'
 command-varo-start-stopped: "§c{varo_name} wurde schon beendet. Nutze '/varo reset' um neuzustarten"
-command-varo-start-success: '§c{varo_name} wurde gestartet'
+command-varo-start-success: '§a{varo_name} wurde gestartet'
 
 # /varo end
 command-varo-end-already: '§c{varo_name} ist bereits beendet'
@@ -16,14 +16,41 @@ command-varo-end-kick: '§4{varo_name} wurde frühzeitig vom einem Admin beendet
 # /varo open
 command-varo-open-already-end: '§c{varo_name} wurde bereits beendet'
 command-varo-open-already: '§c{varo_} ist bereits offen'
-command-varo-open: '§e{varo_name} wurde geöffnet. Die Spieler können nun beitreten'
+command-varo-open: '§a{varo_name} wurde geöffnet. Die Spieler können nun beitreten'
 
 # /varo close
 command-varo-close-ended: '§c{varo_name} ist schon beendet'
 command-varo-close-closed: '§c{varo_name} wurde noch nicht geöffnet'
-command-varo-close-started: '§c{varo'
+command-varo-close-started: '§c{varo_name} wurde bereits gestartet'
+command-varo-close: '§a{varo_name} wurde geschlossen!'
 
+# /varo reset
+command-varo-reset-user: '§4{varo_name} wurde frühzeitig beendet.'
+command-varo-reset-admin-firstline: '§c{varo_name} wurde frühzeitig beendet und zurückgesetzt.'
+command-varo-reset-admin-secondline: '§4Du musst jetzt die 3 Welten Ordner löschen!'
 
+# /varo reload
+command-varo-reload-success: '§aDas Plugin wurde neu geladen'
 
-varo-starting: '§e{varo_name} startet in {seconds} Sekunden'
+# Todes Nachrichten
+death-by-player: '§e{player_name} §7wurde von §e{killer_name} §7getötet'
+death-standart: '§e{player_name} §7ist gestorben'
+death-kick-message: '§4Du bist gestorben. §cDamit bist du aus §e{varo_name} §causgeschieden'
+
+# Join Leave
+player-join: '§e{player_name} §3hat den Server betreten'
+player-leave: '§e{player_name} §3hat den Server verlassen'
+player-join-fail-closed: '§4{varo_name} hat noch nicht begonnen.'
+player-join-fail-ended: '§4{varo_name} ist schon vorbei. §cDanke fürs Mitspielen.'
+info-admin-state-prephase: '§e{varo_name} befindet sich in der Vorbereitungsphase.'
+info-admin-state-open: '§e{varo_name} ist offen und kann ab jetzt gestartet werden.'
+
+# Login protection
+login-10-second: '§e{player_name}§3 hat den Server betreten und ist in §e10§3 Sekunden angreifbar'
+login-3-2-second: '§e{player_name}§3 ist in §e{seconds}§3 Sekunden angreifbar'
+login-1-second: '§e{player_name}§3 ist in §eeiner§3 Sekunde angreifbar'
+login-finish: '§cDu bist nun verwundbar'
+
+# Varo Start
+varo-starting: '§e{varo_name} beginnt in {seconds} Sekunden'
 varo-start: '§cMögen die Spiele beginnen'
