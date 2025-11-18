@@ -1,0 +1,20 @@
+no-permission: '§cDu hast dazu keine Rechte'
+only-player: '§cDieser Command kann nur von Spielern ausgeführt werde'
+
+# /varo start
+command-varo-start-already: '§c{varo_name} startet schon'
+command-varo-start-prephase: "§c{varo_name} befindet sich noch in der Vorbereitung. Nutze '/varo open' um es zu öffnen"
+command-varo-start-running: '§c{varo_name} ist schon am laufen'
+command-varo-start-stopped: "§c{varo_name} wurde schon beendet. Nutze '/varo reset' um neuzustarten"
+command-varo-start-success: '§c{varo_name} wurde gestartet'
+
+# /varo end
+command-varo-end-already: '§c{varo_name} ist bereits beendet'
+command-varo-end-fail: '§c{varo_name} kann nicht beendet werden, da es nicht gestartet wurde'
+command-varo-end-kick: '§4{varo_name} wurde frühzeitig vom einem Admin beendet.'
+
+# /varo open
+
+
+varo-starting: '§e{varo_name} startet in {seconds} Sekunden'
+varo-start: '§cMögen die Spiele beginnen'
