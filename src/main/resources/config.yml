@@ -13,71 +13,83 @@
 # ------------------------------------------------------------------------- #
 
 # ========================================================================= #
+#                             0. INFORMATION                                #
+# ========================================================================= #
+
+#
+#
+#
+
+
+# ========================================================================= #
 #                            I. CORE SETTINGS                               #
 # ========================================================================= #
 
-# Die interne Versionsnummer der Konfigurationsdatei.
-# NICHT ändern, wird zur Kompatibilitätsprüfung des Plugins genutzt.
+# The internal version number of the configuration file.
+# DO NOT change this, it is used for plugin compatibility checks.
 version: 1.0.0
 
-# Die zu verwendende Sprache für alle Plugin-Nachrichten (z.B. de oder en).
-# Stellt sicher, dass die entsprechende Locale-Datei existiert (locales/de.yml).
+# The language to be used for all plugin messages (e.g., de or en).
+# Make sure the corresponding locale file exists (locales/de.yml).
+# Languages availabel: de, en, fr, es, ru
 locale: de
 
-# Der Anzeigename für das Varo-Event.
+# The display name for the Varo event.
 varo-name: 'Varo 4'
 
-# Der Server-MOTD, der im Multiplayer-Menü angezeigt wird.
+# The server MOTD (Message of the Day) shown in the multiplayer menu.
 server-motd: 'A VaroX Server'
 
 # ========================================================================= #
 #                            II. PLAYER SETTINGS                            #
 # ========================================================================= #
 
-# Maximale Spieleranzahl-Modus:
-# - DYNAMIC: Berechnet Max-Slots aus der Anzahl der registrierten Teams/Spieler.
-# - SET: Nutzt den fest eingestellten Wert unten.
-# - SERVER: Nimmt den Wert aus der server.propeties
+# Maximum player count mode:
+# - DYNAMIC: Calculates Max Slots based on the number of registered teams/players.
+# - SET: Uses the fixed value specified below.
+# - SERVER: Takes the value from server.properties.
 max-player-count-mode: DYNAMIC
 
-# Maximale Slots, wenn 'max-player-count-mode' auf SET steht.
+# Maximum slots, used when 'max-player-count-mode' is SET.
+# NOTE: This is only visual.
 max-player-count-set: 100
 
-# Maximale Slots, wenn 'max-player-count-mode' auf SET steht.
+# Enables start protection.
 enable-start-protection: true
 
-# Dauer des Startschutzes in Sekunden. Während dieser Zeit können sich Spieler
-# nicht gegenseitig angreifen oder Schaden zufügen.
-start-protection-time: 10 # (Beispiel: 10 Sekunden)
+# Duration of the start protection in seconds. During this time, players
+# cannot attack each other or inflict damage.
+start-protection-time: 10 # (Example: 10 seconds)
 
 # ========================================================================= #
 #                         III. WORLDBORDER & MAP                            #
 # ========================================================================= #
 
-# Aktiviert die dynamische Weltgrenze (WorldBorder) des Varo-Events.
+# Activates the dynamic World Border for the Varo event.
+# You should enable the WorldBoarder beacause the game would be very lame if everyone are 10k blocks away.
 enable-worldboarder: true
 
-# Die Größe des Weltborders zu Beginn des Spiels (Radius).
-# ACHTUNG: Der tatsächliche Rand liegt bei start_worldboarder_size * 2
-# Beispiel: 2000 entspricht einem Spielfeld von 4000x4000 Blöcken.
+# The starting size of the World Border (Radius).
+# NOTE: The actual edge is at start_worldboarder_size * 2
+# Example: 2000 corresponds to a playing field of 4000x4000 blocks.
 start-worldboarder-size: 2000
 
-# Das Zentrum der Weltgrenze. Normalerweise (0, 0).
+# The center of the World Border. Usually (0, 0).
 center-x: 0
 center-z: 0
 
-# Phasen der Weltgrenzen-Verkleinerung (Shrink-Phases).
-# Die Phasen werden nacheinander ausgeführt, nachdem die vorherige Phase abgeschlossen ist.
-# Denk daran, dass im Nether die WorldBoarder 8mal so schnell verkleinert wie in der Overworld
+# World Border Shrink Phases.
+# The phases are executed sequentially after the previous phase is complete.
+# NOTE: Remember that in the Nether, the World Border shrinks 8 times faster than in the Overworld.
+# These are the default phases and you should change them to your likes.
 border_phases:
   '1':
-    # Phasen der Weltgrenzen-Verkleinerung (Shrink-Phases).
-    # Die Phasen werden nacheinander ausgeführt, nachdem die vorherige Phase abgeschlossen ist.
+    # Delay before this phase starts (in seconds).
     delay_seconds: 60
-    # Die Zielgröße des WorldBorders nach Abschluss dieser Phase (Radius).
+    # The target size of the World Border after this phase is complete (Radius).
     target_size: 1000
-    # Dauer der Verkleinerung (Duration): Wie lange die Verkleinerung auf die target_size
-    # dauern soll (in Sekunden).
+    # Duration of the shrink: How long the reduction to the target_size
+    # should take (in seconds).
     duration_seconds: 60
   '2':
     delay_seconds: 60
@@ -92,21 +104,21 @@ border_phases:
 #                        IV. BANNED ITEMS & POTIONS                         #
 # ========================================================================= #
 
-# Eine Liste von Gegenständen, die weder hergestellt noch benutzt werden dürfen.
-# Format: MATERIAL_NAME[:DATA_VALUE] (z.B. 'GOLDEN_APPLE:1' für Enchanted Golden Apple)
+# A list of items that are neither allowed to be crafted nor used.
+# Format: MATERIAL_NAME[:DATA_VALUE] (e.g., 'GOLDEN_APPLE:1' for Enchanted Golden Apple)
 banned-items:
-  - ENDER_EYE           # Enderaugen -> Kein END erlaubt, sollte so gelassen werden
-  - SKULL:1             # Witherskelleton Skull -> Keine Wither
-  - GOLDEN_APPLE:1      # Verzauberter Goldapfel
-  - FISHING_ROD         # Angelrute
+  - ENDER_EYE           # Ender Eyes -> No END allowed, should be left as is
+  - SKULL:1             # Wither Skeleton Skull -> No Wither Boss
+  - GOLDEN_APPLE:1      # Enchanted Golden Apple
+  - FISHING_ROD         # Fishing Rod
 
-# Eine Liste von Tränken, die nicht gebraut, getrunken oder als Splash geworfen werden dürfen.
-# Hier werden die Item-IDs + Data-Werte von Spigot/Bukkit verwendet.
-# Die Liste enthält Basis-, Extended- und Tier II-Versionen (auch Splash).
+# A list of potions that are not allowed to be brewed, drunk, or thrown as Splash Potions.
+# This uses the Item IDs + Data Values from Spigot/Bukkit.
+# The list includes Base, Extended, and Tier II versions (including Splash).
 banned-potions:
-  # TRÄNKE, DIE ALS ZU STARK ODER ZU STÖREND GESEHEN WERDEN
+  # POTIONS CONSIDERED TOO POWERFUL OR TOO ANNOYING
 
-  # GIFT (POISON)
+  # POISON
   - '8196'  # Poison I (0:45)
   - '8260'  # Poison I (Extended 2:00)
   - '8228'  # Poison II (1:00)
@@ -114,27 +126,27 @@ banned-potions:
   - '16452' # Splash Poison I (Extended 1:30)
   - '16420' # Splash Poison II (0:45)
 
-  # SCHADEN (HARMING)
+  # HARMING (Instant Damage)
   - '8204'  # Harming I (Instant)
   - '8236'  # Harming II (Instant)
   - '16396' # Splash Harming I (Instant)
   - '16428' # Splash Harming II (Instant)
 
-  # TRÄNKE, DIE FÜR UNFAIRE VORTEILE SORGEN
+  # POTIONS THAT LEAD TO UNFAIR ADVANTAGES
 
-  # SICHTBARKEIT (NIGHT VISION)
+  # NIGHT VISION
   - '8238'  # Night Vision (3:00)
   - '8262'  # Night Vision (Extended 8:00)
   - '16422' # Splash Night Vision (2:15)
   - '16454' # Splash Night Vision (Extended 6:00)
 
-  # SCHWÄCHE (WEAKNESS)
+  # WEAKNESS
   - '8232'  # Weakness (1:30)
   - '8264'  # Weakness (Extended 4:00)
   - '16424' # Splash Weakness (1:07)
   - '16456' # Splash Weakness (Extended 3:00)
 
-  # LANGSAMKEIT (SLOWNESS)
+  # SLOWNESS
   - '8234'  # Slowness (1:30)
   - '8266'  # Slowness (Extended 4:00)
   - '16426' # Splash Slowness (1:07)
