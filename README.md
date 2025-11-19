@@ -22,6 +22,7 @@ VaroX implements the critical mechanics necessary for hosting a Varo event:
 * **State Control:** Direct administrative control over the game status (`Open`, `Running`, `Ended`) and the ability to perform a complete system reset.
 * **Data Integrity:** All critical game and team data is saved instantly to the `data/` directory (JSON format) after every modification, guaranteeing maximum data protection against server crashes.
 * **Localization:** Includes five default languages (DE, EN, FR, ES, RU) with all messages easily customizable via dedicated `YAML` files.
+    * **Varo 4 Immersion (DE):** **The default German configuration uses the exact core messages from the Varo 4 format to ensure an authentic Varo experience.**
 
 ## 3. Compatibility and Installation
 
