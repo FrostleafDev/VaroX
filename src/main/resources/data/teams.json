@@ -1,10 +1,12 @@
 [
   {
     "id": 1,
-    "name": "",
+    "name": "1",
     "kills": 0,
     "strikes": 0,
     "alive": true,
-    "members": ["", "", ""]
-   }
+    "members": [
+      "jozelot_"
+    ]
+  }
 ]
