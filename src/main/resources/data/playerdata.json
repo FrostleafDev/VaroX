@@ -1,6 +1,8 @@
+// Datei dient der reinen Veranschaulichung und wird nicht direkt vom Plugin genommen, sondern während der Laufzeit erstellt.
+
 [
   {
-    "uuid": "",
+    "name": "",
     "alive": true,
     "kills": 0,
     "disconnects": 0,
