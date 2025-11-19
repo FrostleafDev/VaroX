@@ -1,6 +1,12 @@
+// Datei dient der reinen Veranschaulichung und wird nicht direkt vom Plugin genommen, sondern während der Laufzeit erstellt.
+
 [
   {
     "id": 1,
-    "position": [0, 0, 0, 0, 0]
+    "x": -3.445295201287541,
+    "y": 84.0,
+    "z": 1.0954178576149212,
+    "yaw": -177.27869,
+    "pitch": 86.81812
   }
 ]
