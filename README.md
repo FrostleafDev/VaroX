@@ -1,4 +1,4 @@
-# VaroX - Professionelle Varo-Verwaltung für Spigot/PaperMC
+# VaroX - Professional Varo Management for Spigot/PaperMC
 
 [![GitHub license](https://img.shields.io/github/license/FrostleafDev/VaroX?style=flat-square)](LICENSE)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/FrostleafDev/VaroX?style=flat-square&include_prereleases)](https://github.com/FrostleafDev/VaroX/releases)
@@ -6,57 +6,58 @@
 
 ---
 
-## 1. Übersicht
+## 1. Project Overview
 
-VaroX ist ein dezidiertes Hardcore-PvP-Plugin, das die vollständige Administration des **Varo-Formats (Vanilla Roleplay)** auf Spigot- und PaperMC-Servern übernimmt.
+VaroX is a dedicated Hardcore PvP plugin designed to fully manage the **Varo format (Vanilla Roleplay)** on Spigot and PaperMC servers.
 
-Das Plugin ist ressourcenschonend konzipiert, benötigt keine externen Abhängigkeiten und bietet Administratoren eine robuste und sichere Verwaltung der Teams, des Spielstatus und der Weltgrenzen (World Border System).
+The plugin provides administrators with a robust and secure toolset for managing teams, game states, and world borders, all while maintaining a minimal footprint and requiring **no external dependencies**.
 
-## 2. Kernfunktionen
+## 2. Core Features
 
-VaroX implementiert die zentralen Mechaniken des Varo-Formats:
+VaroX implements the critical mechanics necessary for hosting a Varo event:
 
-* **Teams und Eliminierung:** Verwaltung von Teams, automatische Eliminierung von Spielern/Teams nach dem Tod sowie Zählung von Kills und Strikes.
-* **Dynamische World Border:** Integriertes System zur automatischen Reduzierung der Weltgrenze in konfigurierbaren Phasen über die gesamte Spieldauer.
-* **Startschutz:** Konfigurierbare Unverwundbarkeitsphase nach dem Start des Events und beim Join.
-* **Zustandsverwaltung:** Direkte Kontrolle über den Spielstatus (`Offen`, `Laufend`, `Beendet`) und vollständiger Reset des Events.
-* **Datensicherheit:** Speicherung aller relevanten Spiel- und Teamdaten unmittelbar nach jeder Änderung, um Datenverlust bei Serverproblemen zu verhindern.
-* **Lokalisierung:** Fünf Standard-Sprachen (DE, EN, FR, ES, RU) und einfache Anpassung aller Nachrichten über die `lang.yml` Dateien.
+* **Team and Elimination Management:** Handles team creation, player kills, strike counts, and automatic elimination of players and teams upon death.
+* **Dynamic World Border:** Features a fully integrated system for automatically reducing the world border size over configurable, sequential phases throughout the event duration.
+* **Start Protection (Grace Period):** Configurable period of invulnerability upon game start and player join, ensuring a fair initial phase.
+* **State Control:** Direct administrative control over the game status (`Open`, `Running`, `Ended`) and the ability to perform a complete system reset.
+* **Data Integrity:** All critical game and team data is saved instantly to the `data/` directory (JSON format) after every modification, guaranteeing maximum data protection against server crashes.
+* **Localization:** Includes five default languages (DE, EN, FR, ES, RU) with all messages easily customizable via dedicated `YAML` files.
 
-## 3. Kompatibilität und Download
+## 3. Compatibility and Installation
 
-VaroX wird separat für mehrere Hauptversionen von Minecraft kompiliert. Bitte laden Sie die passende JAR-Datei für Ihren Server von der [Releases-Seite](https://github.com/FrostleafDev/VaroX/releases) herunter.
+VaroX is compiled separately to provide stable support across multiple major Minecraft versions. Please download the specific JAR file corresponding to your server version from the [Releases page](https://github.com/FrostleafDev/VaroX/releases).
+All versions do have the same features.
 
-| Minecraft Version | Java | Getestet auf | Besonderheit |
+| Minecraft Version | Java Requirement | Tested On | Notes |
 | :--- | :--- | :--- | :--- |
-| **1.20.10** | Java 17+ | PaperMC / Spigot | Aktuellste Version mit voller Performance-Optimierung. |
-| **1.16.5** | Java 8/11 | PaperMC / Spigot | Stabile, weit verbreitete Generation. |
-| **1.12.2** | Java 8 | Spigot | Support für ältere Modding-Umgebungen. |
-| **1.8.8** | Java 8 | Spigot | Legacy-Support für die klassische PvP-Engine. |
+| **1.20.10** | Java 17+ | PaperMC / Spigot | Latest version, optimized for modern environments. |
+| **1.16.5** | Java 8/11 | PaperMC / Spigot | Stable and commonly used modern version. |
+| **1.12.2** | Java 8 | Spigot | Maintained for compatibility with older setups. |
+| **1.8.8** | Java 8 | Spigot | Legacy support for the classic PvP engine. |
 
-## 4. Wichtige Admin-Befehle
+## 4. Essential Admin Commands
 
-Alle Befehle beginnen mit `/varo` (Alias: `/vr`). Die Ausführung erfordert die Berechtigung `varox.admin`.
+All administrative commands start with `/varo` (Alias: `/vr`) and require the permission `varox.admin`.
 
-| Befehl | Kategorie | Funktion |
+| Command | Category | Function |
 | :--- | :--- | :--- |
-| `/varo start` | **State** | Startet den Countdown und leitet das Event ein. |
-| `/varo end` | **State** | Beendet das laufende Varo sofort (Kickt alle Spieler). |
-| `/varo team add <Name> <Spieler...>` | **Team** | Erstellt ein Team mit den angegebenen Spielernamen. |
-| `/varo team remove <Name>` | **Team** | Löscht ein Team und dessen Daten. |
-| `/varo team list` | **Team** | Listet alle registrierten Teams und deren Status auf. |
-| `/varo spawn set <ID>` | **Setup** | Setzt einen Team-Spawn-Punkt an Ihrer aktuellen Position. |
-| `/varo reset` | **Maintenance** | Setzt das Plugin in den Anfangszustand zurück. |
-| `/varo reload` | **Maintenance** | Lädt Konfiguration und Sprachen neu. |
+| `/varo start` | **State** | Initiates the countdown and starts the event. |
+| `/varo end` | **State** | Immediately terminates the running Varo event (kicks all players). |
+| `/varo team add <Name> <Player...>` | **Team** | Creates a new team with the specified player names. |
+| `/varo team remove <Name>` | **Team** | Deletes a team and all associated data. |
+| `/varo team list` | **Team** | Lists all registered teams and their current status. |
+| `/varo spawn set <ID>` | **Setup** | Sets a team spawn point at the administrator's current location. |
+| `/varo reset` | **Maintenance** | Resets the plugin to its initial state, allowing a fresh start. |
+| `/varo reload` | **Maintenance** | Reloads configuration and language files without restarting the server. |
 
-## 5. Support und Kontakt
+## 5. Support and Contribution
 
-Für technische Fragen, Bug-Reports oder Feature-Vorschläge bitten wir Sie, die folgenden Kanäle zu nutzen:
+For technical questions, bug reports, or feature suggestions, please use the following channels:
 
-* **GitHub Issues:** [Hier einen neuen Issue eröffnen](https://github.com/FrostleafDev/VaroX/issues)
-* **Discord:** [Link zu deinem Discord]
-* **Webseite:** [jozelot.de](https://jozelot.de)
+* **GitHub Issues:** [Open a new issue here](https://github.com/FrostleafDev/VaroX/issues)
+* **Discord:** [jozelot.de/discord](https://jozelot.de/discord)
+* **Website:** [jozelot.de](https://jozelot.de)
 
 ---
 
-> VaroX ist ein Projekt von Frostleaf (jozelot_).
+> VaroX is a project developed by Frostleaf (jozelot_).
