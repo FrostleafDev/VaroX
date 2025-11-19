@@ -1,10 +1,10 @@
 # VaroX - Professional Varo Management for Spigot/PaperMC 
-## NOT FINISHED FOR RELEASE
 
 [![GitHub license](https://img.shields.io/github/license/FrostleafDev/VaroX?style=flat-square)](LICENSE)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/FrostleafDev/VaroX?style=flat-square&include_prereleases)](https://github.com/FrostleafDev/VaroX/releases)
 [![GitHub last commit](https://img.shields.io/github/last-commit/FrostleafDev/VaroX?style=flat-square)](https://github.com/FrostleafDev/VaroX/commits/main)
 
+## NOT FINISHED FOR RELEASE
 ---
 
 ## 1. Project Overview
