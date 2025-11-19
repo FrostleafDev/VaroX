@@ -9,12 +9,11 @@
 #                                                      |__|/ \|__|
 #
 # ------------------------------------------------------------------------- #
-# VaroX Configuration | Developed by Frostleaf (jozelot_)
+# VaroX DE Locale Configuration | Developed by Frostleaf (jozelot_)
 # ------------------------------------------------------------------------- #
 
 # Bei jeder Nachricht kann die {varo_name} Variable genutzt werden. Diese ist mit der 'varo-name' Konfiguration in der 'config.yml' verbunden.
 # Bei deinen einzelnen Nachrichten stehen die spezifischen Variablen dabei.
-#
 
 # ========================================================================= #
 #                            I. CORE MESSAGES                               #
@@ -115,8 +114,8 @@ command-varo-team-list-success-header: '§6--- Registrierte Teams ({team_count})
 command-varo-team-list-success-team: "§7- ID {team_id}: §b{team_name} §7[{team_member_count} Mitglieder, Kills: {team_kills}, Status: {status}§7]"
 command-varo-team-list-success-footer: "§6----------------------------"
 # Status-Anzeige
-command-varo-team-list-success-death: '§4ALIVE'
-command-varo-team-list-success-alive: '§aDEAD'
+command-varo-team-list-success-death: '§4DEAD'
+command-varo-team-list-success-alive: '§aALIVE'
 
 
 # ========================================================================= #
@@ -166,7 +165,7 @@ player-join: '§e{player_name} §3hat den Server betreten.'
 player-leave: '§e{player_name} §3hat den Server verlassen.'
 player-join-fail-closed: '§e{varo_name} §4ist noch nicht offen.'
 player-join-fail-ended: '§e{varo_name} §4ist schon vorbei. §cDanke fürs Mitspielen!'
-player-join-fail-not-in-a-team: '§4Du bist in keinem §e{varo_name} §4Team registriert!'
+player-join-fail-not-in-a-team: '§4Du bist in keinem §e{varo_name} §4Team registriert und darfst dem Server nicht beitreten!'
 
 ### Admin-Infos (State) ###
 info-admin-state-prephase: '§e{varo_name} befindet sich in der Vorbereitungsphase (Game State 0).'

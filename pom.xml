@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.jozelot</groupId>
-    <artifactId>varox</artifactId>
+    <artifactId>VaroX</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 

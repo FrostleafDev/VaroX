@@ -12,14 +12,65 @@
 # VaroX Configuration | Developed by Frostleaf (jozelot_)
 # ------------------------------------------------------------------------- #
 
-# ========================================================================= #
-#                             0. INFORMATION                                #
-# ========================================================================= #
+# ------------------------------------------------------------------------- #
+# 0.1 GET STARTED & SUPPORT                                                 #
+# ------------------------------------------------------------------------- #
 
-#
-#
-#
+# Hey there, thanks for installing VaroX!
+# We hope this plugin gives you the ultimate Varo experience.
 
+# Feedback & Support:
+# If you have any improvement ideas, feature requests, or find any bugs,
+# please feel free to join our Discord or open an issue on GitHub.
+# All our socials are listed on the GitHub and Modrinth pages, or on our website:
+# -> https://jozelot.de
+
+# ------------------------------------------------------------------------- #
+# 0.2 TECHNICAL & DATA SAFETY                                               #
+# ------------------------------------------------------------------------- #
+
+# Data Safety Note:
+# Your game data is safe! All critical information (Teams, Spawns, Game State)
+# is automatically saved immediately after every change to ensure maximum data safety.
+
+# Server Restart:
+# The server can be safely restarted during the Varo run without losing progress.
+
+# Requirements:
+# You are currently using the 1.8.8 version of the plugin.
+# It requires Java 8 and is officially tested on Spigot/Paper versions 1.8.8 - 1.12.2.
+# Dependencies: No external dependencies (like Vault or PlaceholderAPI) are required.
+
+# ------------------------------------------------------------------------- #
+# 0.3 LOCALIZATION                                                          #
+# ------------------------------------------------------------------------- #
+
+# The plugin includes 5 default languages (de, en, fr, es, ru).
+# To add your own language:
+# 1. Create a file inside the 'locales/' folder.
+# 2. Change the 'locale' option below to your file name.
+# Tip: If you want your translation included in future releases, send it to us on Discord!
+
+# ------------------------------------------------------------------------- #
+# 0.4 CORE FEATURES & COMMANDS                                              #
+# ------------------------------------------------------------------------- #
+
+# CORE FEATURES:
+# * Automatic player data management (Eliminations, Kills, Strikes).
+# * Configurable Team size and grace period.
+
+# PROTECTION & WORLD:
+# * Integrated Start Protection: PVP is disabled for the first configured seconds.
+# * Customizable World Border system that shrinks during the runtime.
+
+# COMMANDS:
+# The plugin is controlled via the /varo command (Alias: /vr):
+# - Team Management: /varo team [add, remove, addMember, removeMember, list]
+# - Spawn Setup:   /varo spawn [add, remove, list]
+# - Game State:    /varo start, /varo end, /varo open, /varo close
+# - Admin Tools:   /varo reload, /varo reset
+
+# Enjoy your Varo round!
 
 # ========================================================================= #
 #                            I. CORE SETTINGS                               #
@@ -151,3 +202,19 @@ banned-potions:
   - '8266'  # Slowness (Extended 4:00)
   - '16426' # Splash Slowness (1:07)
   - '16458' # Splash Slowness (Extended 3:00)
+
+# ========================================================================= #
+#                            V. GAMEPLAY SETTINGS                           #
+# ========================================================================= #
+
+# If true, team members cannot damage each other (Standard Varo/Varo 4 Rule).
+# Set to false to enable Friendly Fire (FF).
+disable-friendly-fire: true
+
+# Controls whether players are eliminated from the Varo event if they die
+# due to non-player sources (e.g., PvE, falling, lava, environment).
+# If set to 'true', a death by a zombie or falling lava will result in
+# the player/team being eliminated (standard Varo rules).
+# If set to 'false', only PvP deaths will lead to elimination; other deaths
+# will be treated as normal respawns (or a simple loss of items).
+player-out-by-non-player-death: true

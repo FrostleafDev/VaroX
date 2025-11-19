@@ -29,6 +29,8 @@ public class ConfigManager {
     private String playerCountMode;
     private int maxPlayerCount;
 
+    private boolean isPlayerDeathNonPlayer;
+
     public double getWorldboarderCenterX() {
         return worldboarderCenterX;
     }
@@ -73,6 +75,10 @@ public class ConfigManager {
         return maxPlayerCount;
     }
 
+    public boolean isPlayerDeathNonPlayer() {
+        return isPlayerDeathNonPlayer;
+    }
+
     public void load() {
         plugin.saveDefaultConfig();
 
@@ -93,6 +99,7 @@ public class ConfigManager {
         motd = plugin.getConfig().getString("server-motd");
         playerCountMode = plugin.getConfig().getString("max-player-count-mode");
         maxPlayerCount = plugin.getConfig().getInt("max-player-count-set");
+        isPlayerDeathNonPlayer = plugin.getConfig().getBoolean("player-out-by-non-player-death");
     }
 
     public String getLocale() {
