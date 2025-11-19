@@ -1,6 +1,9 @@
 package de.jozelot.varoX.listeners;
 
 import de.jozelot.varoX.manager.LangManager;
+import de.jozelot.varoX.manager.TeamsManager;
+import de.jozelot.varoX.manager.User;
+import de.jozelot.varoX.manager.UserManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -24,10 +27,14 @@ public class DeathListener implements Listener {
     private final JavaPlugin plugin;
     private final Set<UUID> waitingForKick = new HashSet<>();
     private final LangManager lang;
+    private final UserManager userManager;
+    private final TeamsManager teamsManager;
 
-    public DeathListener(JavaPlugin plugin, LangManager lang) {
+    public DeathListener(JavaPlugin plugin, LangManager lang, UserManager userManager, TeamsManager teamsManager) {
         this.plugin = plugin;
         this.lang = lang;
+        this.userManager = userManager;
+        this.teamsManager = teamsManager;
     }
 
     private static class CombatInfo {
@@ -90,6 +97,16 @@ public class DeathListener implements Listener {
 
         String finalDeathMessage = fallbackMessage;
 
+        Optional<User> userOptionalVictim = userManager.getUserByName(victim.getName());
+
+        if (userOptionalVictim.isPresent()) {
+            User userVictim = userOptionalVictim.get();
+            userVictim.setAlive(false);
+            userManager.updateUser(userVictim);
+        }
+        teamsManager.checkAndSetTeamStatus(victim.getName(), userManager);
+
+
         boolean killerFound = false;
 
         if (combatLog.containsKey(victimUUID)) {
@@ -105,6 +122,14 @@ public class DeathListener implements Listener {
                     Map<String, String> deathByPlayer = new HashMap<>();
                     deathByPlayer.put("player_name", String.valueOf(victim.getName()));
                     deathByPlayer.put("killer_name", String.valueOf(killer.getName()));
+
+                    Optional<User> userOptional = userManager.getUserByName(killer.getName());
+
+                    if (userOptional.isPresent()) {
+                        User user = userOptional.get();
+                        user.addKill();
+                        userManager.updateUser(user);
+                    }
 
                     finalDeathMessage = lang.format("death-by-player", deathByPlayer);
                     killerFound = true;

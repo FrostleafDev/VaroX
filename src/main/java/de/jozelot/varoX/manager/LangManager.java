@@ -54,12 +54,26 @@ public class LangManager {
 
     private String playerJoinFailClosed;
     private String playerJoinFailEnded;
+    private String playerJoinFailNotInATeam;
     private String infoAdminStatePrephase;
     private String infoAdminStateOpen;
 
     private String loginFinish;
-
     private String varoStart;
+    private String bannedItemAlert;
+
+    private String commandVaroTeamListNoTeam;
+    private String commandVaroTeamListSuccessFooter;
+    private String commandVaroTeamListSuccessDeath;
+    private String commandVaroTeamListSuccessAlive;
+
+    private String commandVaroSpawnListNoSpawn;
+    private String commandVaroSpawnListSuccessFooter;
+
+    private String noSpawnAvailable;
+    private String noTeamAvailable;
+    private String notInATeam;
+    private String notEnoughSpawns;
 
     public void load() {
         locale = config.getLocale();
@@ -78,8 +92,57 @@ public class LangManager {
         langConfig = YamlConfiguration.loadConfiguration(langFile);
 
         loadData();
+
     }
 
+
+    public String getBannedItemAlert() {
+        return bannedItemAlert;
+    }
+
+    public String getCommandVaroTeamListNoTeam() {
+        return commandVaroTeamListNoTeam;
+    }
+
+    public String getCommandVaroTeamListSuccessFooter() {
+        return commandVaroTeamListSuccessFooter;
+    }
+
+    public String getCommandVaroTeamListSuccessDeath() {
+        return commandVaroTeamListSuccessDeath;
+    }
+
+    public String getCommandVaroTeamListSuccessAlive() {
+        return commandVaroTeamListSuccessAlive;
+    }
+
+    public String getCommandVaroSpawnListNoSpawn() {
+        return commandVaroSpawnListNoSpawn;
+    }
+
+    public String getCommandVaroSpawnListSuccessFooter() {
+        return commandVaroSpawnListSuccessFooter;
+    }
+
+    public String getPlayerJoinFailNotInATeam() {
+        return playerJoinFailNotInATeam;
+    }
+
+    public String getNoSpawnAvailable() {
+        return noSpawnAvailable;
+    }
+
+    public String getNoTeamAvailable() {
+        return noTeamAvailable;
+    }
+
+    public String getNotInATeam() {
+        return notInATeam;
+    }
+
+    public String getNotEnoughSpawns() {
+        return notEnoughSpawns;
+    }
 
     private void loadData() {
         noPermission = format("no-permission", null);
@@ -114,12 +177,27 @@ public class LangManager {
 
         playerJoinFailClosed = format("player-join-fail-closed", null);
         playerJoinFailEnded = format("player-join-fail-ended", null);
+        playerJoinFailNotInATeam = format("player-join-fail-not-in-a-team", null);
         infoAdminStatePrephase = format("info-admin-state-prephase", null);
         infoAdminStateOpen = format("info-admin-state-open", null);
 
         loginFinish = format("login-finish", null);
-
         varoStart = format("varo-start", null);
+        bannedItemAlert = format("banned-item-alert", null);
+
+        commandVaroTeamListNoTeam = format("command-varo-team-list-no-team", null);
+        commandVaroTeamListSuccessFooter = format("command-varo-team-list-success-footer", null);
+        commandVaroTeamListSuccessDeath = format("command-varo-team-list-success-death", null);
+        commandVaroTeamListSuccessAlive = format("command-varo-team-list-success-alive", null);
+
+        commandVaroSpawnListNoSpawn = format("command-varo-spawn-list-no-spawn", null);
+        commandVaroSpawnListSuccessFooter = format("command-varo-spawn-list-success-footer", null);
+
+        noSpawnAvailable = format("no-spawn-available", null);
+        noTeamAvailable = format("no-team-available", null);
+        notInATeam = format("not-in-team", null);
+        notEnoughSpawns = format("not-enough-spawns", null);
+
     }
 
     public String get(String path) {

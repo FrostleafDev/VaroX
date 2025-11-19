@@ -1,5 +1,7 @@
+usage: '§cVerwendung: {command_usage}'
 no-permission: '§cDu hast dazu keine Rechte'
 only-player: '§cDieser Command kann nur von Spielern ausgeführt werde'
+
 
 # /varo start
 command-varo-start-already: '§c{varo_name} startet schon'
@@ -11,7 +13,7 @@ command-varo-start-success: '§a{varo_name} wurde gestartet'
 # /varo end
 command-varo-end-already: '§c{varo_name} ist bereits beendet'
 command-varo-end-fail: '§c{varo_name} kann nicht beendet werden, da es nicht gestartet wurde'
-command-varo-end-kick: '§4{varo_name} wurde frühzeitig vom einem Admin beendet.'
+command-varo-end-kick: '§e{varo_name} §4urde frühzeitig vom einem Admin beendet.'
 
 # /varo open
 command-varo-open-already-end: '§c{varo_name} wurde bereits beendet'
@@ -25,12 +27,48 @@ command-varo-close-started: '§c{varo_name} wurde bereits gestartet'
 command-varo-close: '§a{varo_name} wurde geschlossen!'
 
 # /varo reset
-command-varo-reset-user: '§4{varo_name} wurde frühzeitig beendet.'
-command-varo-reset-admin-firstline: '§c{varo_name} wurde frühzeitig beendet und zurückgesetzt.'
+command-varo-reset-user: '§e{varo_name} §4wurde frühzeitig beendet.'
+command-varo-reset-admin-firstline: '§e{varo_name} §4wurde frühzeitig beendet und zurückgesetzt.'
 command-varo-reset-admin-secondline: '§4Du musst jetzt die 3 Welten Ordner löschen!'
 
 # /varo reload
 command-varo-reload-success: '§aDas Plugin wurde neu geladen'
+
+# /varo team add
+command-varo-team-add-created: "§aTeam '{team_name}' mit {team_size} Mitgliedern erstellt"
+command-varo-team-add-warning: "§eWarnung: Folgende Spieler konnten nicht auf Existenz geprüft werden und wurden trotzdem hinzugefügt (riskant): {player_names}"
+command-varo-team-add-exists: "§cTeam '{team_name}' existiert schon"
+
+command-varo-team-remove-success: "§aTeam '{team_name}' (ID: '{team_id}') wurde erfolgreich gelöscht"
+command-varo-team-remove-error: "§cTeam '{team_name}' konnte nicht gelöscht werden"
+command-varo-team-remove-not-found: "§cTeam '{team_name}' konnte nicht gelöscht werden, weil es nicht existiert"
+
+command-varo-team-addmember-already: "§c'{player_name}' ist bereits im Team '{team_name}"
+command-varo-team-addmember-success: "§a'{player_name}' wurde erfolgreich zu Team '{team_name}' hinzugefügt"
+command-varo-team-addmember-not-found: "§cTeam '{team_name}' existiert nicht"
+
+command-varo-team-removemember-success: "§a'{player_name}' wurde erfolgreich aus Team '{team_name}' entfernt"
+command-varo-team-removemember-not-a-member: "§c'{player_name}' ist kein Mitglied von Team '{team_name}'"
+command-varo-team-removemember-not-found: "§cTeam '{team_name}' existiert nicht"
+
+command-varo-team-list-no-team: '§cEs sind noch keine Teams registriert'
+command-varo-team-list-success-header: '§6--- Registrierte Teams ({team_count}) ---'
+command-varo-team-list-success-team: "§7- ID {team_id}: §b{team_name} §7[{team_member_count} Mitglieder, Kills: {team_kills}, Status: {status}§7]"
+command-varo-team-list-success-footer: "§6----------------------------"
+command-varo-team-list-success-death: '§aDEAD'
+command-varo-team-list-success-alive: '§aALIVE'
+
+# /varo spawn add
+command-varo-spawn-add-exists: "§cEin Spawn mit ID {spawn_id} existiert bereits"
+command-varo-spawn-add-success: "§aSpawn mit ID {spawn_id} wurde erfolgreich erstellt"
+
+command-varo-spawn-remove-success: "§aSpawn mit ID {spawn_id} wurd erfolgreich gelöscht"
+command-varo-spawn-remove-not-found: "§aSpawn mit ID {spawn_id} konnte nicht gelöscht werden, weil er nicht existiert"
+
+command-varo-spawn-list-no-spawn: '§cEs sind noch keine Spawns registriert'
+command-varo-spawn-list-success-header: '§6------ Registrierte Spawns ({spawn_count}) ------'
+command-varo-spawn-list-success-team: "§7- ID {spawn_id}: [§bX: {spawn_x}, Y: {spawn_y}, Z: {spawn_z}, YAW: {spawn_yaw}, PITCH: {spawn_pitch}§7]"
+command-varo-spawn-list-success-footer: "§6--------------------------------------------------------"
 
 # Todes Nachrichten
 death-by-player: '§e{player_name} §7wurde von §e{killer_name} §7getötet'
@@ -40,10 +78,17 @@ death-kick-message: '§4Du bist gestorben. §cDamit bist du aus §e{varo_name} �
 # Join Leave
 player-join: '§e{player_name} §3hat den Server betreten'
 player-leave: '§e{player_name} §3hat den Server verlassen'
-player-join-fail-closed: '§4{varo_name} hat noch nicht begonnen.'
-player-join-fail-ended: '§4{varo_name} ist schon vorbei. §cDanke fürs Mitspielen.'
+player-join-fail-closed: '§e{varo_name} §4hat noch nicht begonnen.'
+player-join-fail-ended: '§e{varo_name} §4ist schon vorbei. §cDanke fürs Mitspielen.'
+player-join-fail-not-in-a-team: '§4Du bist in keinem §e{varo_name} §4Team registriert!'
 info-admin-state-prephase: '§e{varo_name} befindet sich in der Vorbereitungsphase.'
 info-admin-state-open: '§e{varo_name} ist offen und kann ab jetzt gestartet werden.'
+
+# Spawn assign
+no-spawn-available: '§cEs ist kein Spawn verfügbar. Du wirst zum Worldspawn teleportiert'
+no-team-available: '§cEs ist kein Team verfügbar'
+not-in-team: '§eDa du in keinem Team registriert wirst bist du jetzt als Zuschauer gelistet'
+not-enough-spawns: '§cEs wurde nicht genug Spawns erstellt. Du wirst zum Worldspawn teleportiert'
 
 # Login protection
 login-10-second: '§e{player_name}§3 hat den Server betreten und ist in §e10§3 Sekunden angreifbar'
@@ -54,3 +99,7 @@ login-finish: '§cDu bist nun verwundbar'
 # Varo Start
 varo-starting: '§e{varo_name} beginnt in {seconds} Sekunden'
 varo-start: '§cMögen die Spiele beginnen'
+
+# Banned Items
+banned-item-alert: '§4Dieses Item wurde von {varo_name} expliziet verboten!'
+

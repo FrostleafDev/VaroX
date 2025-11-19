@@ -1,10 +1,7 @@
 package de.jozelot.varoX.listeners;
 
-import de.jozelot.varoX.manager.LangManager;
-import de.jozelot.varoX.manager.StatesManager;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
+import de.jozelot.varoX.manager.*;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -20,23 +17,26 @@ import org.bukkit.event.player.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class JoinLeaveListener implements Listener {
 
     private final StatesManager statesManager;
     private final LangManager lang;
     private final JavaPlugin plugin;
+    private final TeamsManager teamsManager;
+    private final SpawnManager spawnManager;
+    private final UserManager userManager;
 
     private List<Player> playerInJoin = new ArrayList<>();
 
-    public JoinLeaveListener(StatesManager statesManager, JavaPlugin plugin, LangManager lang) {
+    public JoinLeaveListener(StatesManager statesManager, JavaPlugin plugin, LangManager lang, TeamsManager teamsManager, SpawnManager spawnManager, UserManager userManager) {
         this.statesManager = statesManager;
         this.plugin = plugin;
         this.lang = lang;
+        this.teamsManager = teamsManager;
+        this.spawnManager = spawnManager;
+        this.userManager = userManager;
     }
 
     @EventHandler
@@ -58,18 +58,54 @@ public class JoinLeaveListener implements Listener {
                 event.getPlayer().sendMessage(lang.getInfoAdminStateOpen());
             }
         }
+        if (statesManager.getGameState() == 1) {
+            assignSpawnToPlayer(event.getPlayer());
+        }
+
+        userManager.registerUser(event.getPlayer().getName());
     }
 
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent event) {
         Player player = event.getPlayer();
+        String playerName = player.getName();
 
-        if (!player.hasPermission("varox.admin")) {
-            if (statesManager.getGameState() == 0) {
-                event.disallow(PlayerLoginEvent.Result.KICK_OTHER,lang.getPlayerJoinFailClosed());
-            } else if (statesManager.getGameState() == 3) {
-                event.disallow(PlayerLoginEvent.Result.KICK_OTHER,lang.getPlayerJoinFailEnded());
+        if (player.hasPermission("varox.admin")) {
+            return;
+        }
+
+        if (statesManager.getGameState() == 0) {
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, lang.getPlayerJoinFailClosed());
+            return;
+        } else if (statesManager.getGameState() == 3) {
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, lang.getPlayerJoinFailEnded());
+            return;
+        }
+
+        boolean playerFoundInTeam = false;
+
+        for (Team team : teamsManager.getAllTeams()) {
+            for (String member : team.getMembers()) {
+                if (member.equalsIgnoreCase(playerName)) {
+
+                    playerFoundInTeam = true;
+
+                    Optional<User> userOptional = userManager.getUserByName(playerName);
+
+                    if (userOptional.isPresent()) {
+                        User user = userOptional.get();
+                        if (user.isAlive()) {
+                            return;
+                        }
+                        event.disallow(PlayerLoginEvent.Result.KICK_OTHER, lang.getDeathKickMessage());
+                        return;
+                    }
+                    return;
+                }
             }
+        }
+        if (!playerFoundInTeam) {
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, lang.getPlayerJoinFailNotInATeam());
         }
     }
 
@@ -81,6 +117,14 @@ public class JoinLeaveListener implements Listener {
         Map<String, String> vars = new HashMap<>();
         vars.put("player_name", String.valueOf(event.getPlayer().getName()));
         event.setQuitMessage(lang.format("player-leave", vars));
+
+        Optional<User> userOptional = userManager.getUserByName(event.getPlayer().getName());
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.addDisconnect();
+            userManager.updateUser(user);
+        }
     }
 
     @EventHandler
@@ -197,5 +241,60 @@ public class JoinLeaveListener implements Listener {
                 timeLeft--;
             }
         }.runTaskTimer(plugin, 0L, 20L);
+    }
+
+    private void assignSpawnToPlayer(Player player) {
+        List<Spawn> allSpawns = new ArrayList<>(spawnManager.getAllSpawns());
+        allSpawns.sort(Comparator.comparingInt(Spawn::getId));
+
+        if (allSpawns.isEmpty()) {
+            player.sendMessage(lang.getNoSpawnAvailable());
+            return;
+        }
+
+        List<Team> allTeams = teamsManager.getAllTeams();
+
+        if (allTeams.isEmpty()) {
+            player.sendMessage(lang.getNoTeamAvailable());
+            return;
+        }
+
+        int maxTeamSize = allTeams.stream()
+                .mapToInt(team -> team.getMembers().size())
+                .max()
+                .orElse(0);
+
+        List<String> playerRotation = new ArrayList<>();
+
+        for (int i = 0; i < maxTeamSize; i++) {
+            for (Team team : allTeams) {
+                List<String> members = team.getMembers();
+                if (i < members.size()) {
+                    playerRotation.add(members.get(i));
+                }
+            }
+        }
+
+        String playerName = player.getName();
+        int spawnIndex = playerRotation.indexOf(playerName);
+
+        if (spawnIndex == -1) {
+            player.sendMessage(lang.getNotInATeam());
+            player.setGameMode(GameMode.SPECTATOR);
+            return;
+        }
+        player.setGameMode(GameMode.SURVIVAL);
+        if (spawnIndex < allSpawns.size()) {
+            Spawn assignedSpawn = allSpawns.get(spawnIndex);
+
+            World world = player.getWorld();
+            Location spawnLocation = assignedSpawn.toLocation(world);
+            player.teleport(spawnLocation);
+
+
+            plugin.getLogger().info("Spieler: " + player.getName() + " kriegt Spawn Nummer " + assignedSpawn.getId());
+        } else {
+            player.sendMessage(lang.getNotEnoughSpawns());
+        }
     }
 }
