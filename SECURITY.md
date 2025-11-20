@@ -1,4 +1,4 @@
-# 🛡️ Security Policy for VaroX
+# Security Policy for VaroX
 
 ## Reporting a Vulnerability
 
