@@ -1,4 +1,4 @@
-package de.jozelot.varoX.manager;
+package de.jozelot.varoX.user;
 
 public class User {
     private String name;

@@ -1,9 +1,10 @@
-package de.jozelot.varoX.manager;
+package de.jozelot.varoX.user;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import de.jozelot.varoX.VaroX; // Angenommen, VaroX ist Ihr Haupt-Plugin
+import de.jozelot.varoX.files.FileManager;
 
 import java.io.File;
 import java.io.FileReader;
@@ -21,9 +22,9 @@ public class UserManager {
     private final VaroX plugin;
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    public UserManager(FileManager fileManager, VaroX plugin) {
-        this.fileManager = fileManager;
+    public UserManager(VaroX plugin) {
         this.plugin = plugin;
+        this.fileManager = plugin.getFileManager();
     }
 
     private List<User> loadUsersFromFile() {

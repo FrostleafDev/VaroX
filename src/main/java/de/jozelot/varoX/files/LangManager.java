@@ -1,9 +1,8 @@
-package de.jozelot.varoX.manager;
+package de.jozelot.varoX.files;
 
-import jdk.nashorn.internal.objects.annotations.Getter;
+import de.jozelot.varoX.VaroX;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.Map;
@@ -11,14 +10,14 @@ import java.util.Map;
 public class LangManager {
 
     private final ConfigManager config;
-    private final JavaPlugin plugin;
+    private final VaroX plugin;
 
     private File langFile;
     private FileConfiguration langConfig;
 
-    public LangManager(JavaPlugin plugin, ConfigManager config) {
+    public LangManager(VaroX plugin) {
         this.plugin = plugin;
-        this.config = config;
+        this.config = plugin.getConfigManager();
     }
 
     private String locale;

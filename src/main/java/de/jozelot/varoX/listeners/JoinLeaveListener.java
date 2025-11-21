@@ -1,9 +1,18 @@
 package de.jozelot.varoX.listeners;
 
+import de.jozelot.varoX.VaroX;
+import de.jozelot.varoX.files.ConfigManager;
+import de.jozelot.varoX.files.LangManager;
 import de.jozelot.varoX.manager.*;
+import de.jozelot.varoX.spawns.Spawn;
+import de.jozelot.varoX.spawns.SpawnManager;
+import de.jozelot.varoX.teams.Team;
+import de.jozelot.varoX.teams.TeamsManager;
+import de.jozelot.varoX.user.User;
+import de.jozelot.varoX.user.UserManager;
+import de.jozelot.varoX.utils.TabListUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,33 +23,36 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import java.util.function.DoubleConsumer;
 
 public class JoinLeaveListener implements Listener {
 
     private final StatesManager statesManager;
     private final LangManager lang;
-    private final JavaPlugin plugin;
+    private final VaroX plugin;
     private final TeamsManager teamsManager;
     private final SpawnManager spawnManager;
     private final UserManager userManager;
+    private final ConfigManager config;
 
     private List<Player> playerInJoin = new ArrayList<>();
 
-    public JoinLeaveListener(StatesManager statesManager, JavaPlugin plugin, LangManager lang, TeamsManager teamsManager, SpawnManager spawnManager, UserManager userManager) {
-        this.statesManager = statesManager;
+    public JoinLeaveListener(VaroX plugin) {
         this.plugin = plugin;
-        this.lang = lang;
-        this.teamsManager = teamsManager;
-        this.spawnManager = spawnManager;
-        this.userManager = userManager;
+        this.statesManager = plugin.getStatesManager();
+        this.lang = plugin.getLangManager();
+        this.teamsManager = plugin.getTeamsManager();
+        this.spawnManager = plugin.getSpawnManager();
+        this.userManager = plugin.getUserManager();
+        this.config = plugin.getConfigManager();
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+
         if (statesManager.getGameState() == 2) {
             startJoinCooldown(event.getPlayer());
             playerInJoin.add(event.getPlayer());
@@ -63,6 +75,9 @@ public class JoinLeaveListener implements Listener {
         }
 
         userManager.registerUser(event.getPlayer().getName());
+        if (config.isTabEnabled()) {
+            TabListUtil.setHeaderFooter(event.getPlayer(), config.getTabHeader(), config.getTabFooter());
+        }
     }
 
     @EventHandler

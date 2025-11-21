@@ -1,4 +1,4 @@
-package de.jozelot.varoX.manager;
+package de.jozelot.varoX.spawns;
 
 import org.bukkit.Location;
 import org.bukkit.World;

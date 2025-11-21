@@ -1,9 +1,15 @@
-package de.jozelot.varoX.manager;
+package de.jozelot.varoX.teams;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import org.bukkit.plugin.java.JavaPlugin;
+import de.jozelot.varoX.VaroX;
+import de.jozelot.varoX.files.FileManager;
+import de.jozelot.varoX.files.LangManager;
+import de.jozelot.varoX.manager.*;
+import de.jozelot.varoX.user.User;
+import de.jozelot.varoX.user.UserManager;
+import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.io.FileReader;
@@ -11,20 +17,23 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class TeamsManager {
 
-    private final JavaPlugin plugin;
+    private final VaroX plugin;
     private final FileManager fileManager;
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private final StatesManager statesManager;
+    private final LangManager lang;
 
-    public TeamsManager(JavaPlugin plugin, FileManager fileManager) {
+    public TeamsManager(VaroX plugin) {
         this.plugin = plugin;
-        this.fileManager = fileManager;
+        this.fileManager = plugin.getFileManager();
+        this.statesManager = plugin.getStatesManager();
+        this.lang = plugin.getLangManager();
     }
 
-    private List<Team> loadTeamsFromFile() {
+    public List<Team> loadTeamsFromFile() {
         File teamsFile = fileManager.getTeamsFile();
         Type teamListType = new TypeToken<List<Team>>(){}.getType();
 
@@ -136,11 +145,58 @@ public class TeamsManager {
         if (allMembersDead) {
             team.setAlive(false);
             updateTeam(team);
-
             //plugin.getLogger().info("Alle Mitglieder von Team " + team.getName() + " sind ausgeschieden. Teamstatus auf TOT gesetzt.");
+        }
+        checkForWinner();
+    }
+
+    public void checkForWinner() {
+        List<Team> allTeams = loadTeamsFromFile();
+
+        long aliveTeamsCount = allTeams.stream()
+                .filter(team -> team.isAlive())
+                .count();
+
+        if (aliveTeamsCount == 1) {
+            Team winner = allTeams.stream()
+                    .filter(team -> team.isAlive())
+                    .findFirst().orElse(null);
+
+            if (winner != null) {
+                plugin.getLogger().info("WINNER FOUND: " + winner.getName());
+                List<String> user = winner.getMembers();
+                if (winner.getMembers().size() == 1) {
+                    String userName = user.get(0);
+
+                    Map<String, String> vars = new HashMap<>();
+                    vars.put("winner_name", userName);
+                    Bukkit.broadcastMessage(lang.format("winner-found-one", vars));
+                } else if (winner.getMembers().size() == 2) {
+                    String userName = user.get(0);
+                    String userName2 = user.get(1);
+
+                    Map<String, String> vars = new HashMap<>();
+                    vars.put("winner_name", userName);
+                    vars.put("winner_name2", userName2);
+                    Bukkit.broadcastMessage(lang.format("winner-found-two", vars));
+                } else {
+                    Map<String, String> vars = new HashMap<>();
+                    vars.put("team_name", winner.getName());
+                    Bukkit.broadcastMessage(lang.format("winner-found-more", vars));
+                }
+                statesManager.setGameState(3);
+            }
+
         }
     }
     public void deleteAllTeams() {
         saveTeamsToFile(new ArrayList<>());
+    }
+
+    public Optional<Team> getTeamOfPlayer(String playerName) {
+        return loadTeamsFromFile().stream()
+                .filter(team -> team.getMembers().stream()
+                        .anyMatch(member -> member.equalsIgnoreCase(playerName)))
+                .findFirst();
     }
 }

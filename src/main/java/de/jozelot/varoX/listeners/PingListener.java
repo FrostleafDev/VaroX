@@ -1,17 +1,19 @@
 package de.jozelot.varoX.listeners;
 
-import de.jozelot.varoX.manager.ConfigManager;
-import de.jozelot.varoX.manager.LangManager;
+import de.jozelot.varoX.VaroX;
+import de.jozelot.varoX.files.ConfigManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerListPingEvent;
 
 public class PingListener implements Listener {
 
+    private final VaroX plugin;
     private final ConfigManager config;
 
-    public PingListener(ConfigManager config) {
-        this.config = config;
+    public PingListener(VaroX plugin) {
+        this.plugin = plugin;
+        this.config = plugin.getConfigManager();
     }
 
     @EventHandler

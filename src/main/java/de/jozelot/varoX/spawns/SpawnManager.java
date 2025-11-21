@@ -1,9 +1,10 @@
-package de.jozelot.varoX.manager;
+package de.jozelot.varoX.spawns;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import de.jozelot.varoX.VaroX; // Angenommen, VaroX ist Ihr Haupt-Plugin
+import de.jozelot.varoX.files.FileManager;
 
 import java.io.File;
 import java.io.FileReader;
@@ -21,9 +22,9 @@ public class SpawnManager {
     private final VaroX plugin;
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    public SpawnManager(FileManager fileManager, VaroX plugin) {
-        this.fileManager = fileManager;
+    public SpawnManager(VaroX plugin) {
         this.plugin = plugin;
+        this.fileManager = plugin.getFileManager();
     }
 
     private List<Spawn> loadSpawnsFromFile() {

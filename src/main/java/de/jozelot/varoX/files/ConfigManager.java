@@ -1,14 +1,14 @@
-package de.jozelot.varoX.manager;
+package de.jozelot.varoX.files;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import de.jozelot.varoX.VaroX;
 
 import java.util.List;
 
 public class ConfigManager {
 
-    private final JavaPlugin plugin;
+    private final VaroX plugin;
 
-    public ConfigManager(JavaPlugin plugin) {
+    public ConfigManager(VaroX plugin) {
         this.plugin = plugin;
     }
 
@@ -29,7 +29,16 @@ public class ConfigManager {
     private String playerCountMode;
     private int maxPlayerCount;
 
+    private boolean isFriendlyFireDisabled;
+
     private boolean isPlayerDeathNonPlayer;
+    private boolean isAdvancementsEnbaled;
+    private boolean isTeamChestsEnabled;
+
+    private boolean isTabEnabled;
+
+    private List<String> tabHeader;
+    private List<String> tabFooter;
 
     public double getWorldboarderCenterX() {
         return worldboarderCenterX;
@@ -79,6 +88,30 @@ public class ConfigManager {
         return isPlayerDeathNonPlayer;
     }
 
+    public boolean isFriendlyFireDisabled() {
+        return isFriendlyFireDisabled;
+    }
+
+    public boolean isAdvancementsEnbaled() {
+        return isAdvancementsEnbaled;
+    }
+
+    public boolean isTeamChestsEnabled() {
+        return isTeamChestsEnabled;
+    }
+
+    public boolean isTabEnabled() {
+        return isTabEnabled;
+    }
+
+    public List<String> getTabHeader() {
+        return tabHeader;
+    }
+
+    public List<String> getTabFooter() {
+        return tabFooter;
+    }
+
     public void load() {
         plugin.saveDefaultConfig();
 
@@ -100,6 +133,14 @@ public class ConfigManager {
         playerCountMode = plugin.getConfig().getString("max-player-count-mode");
         maxPlayerCount = plugin.getConfig().getInt("max-player-count-set");
         isPlayerDeathNonPlayer = plugin.getConfig().getBoolean("player-out-by-non-player-death");
+
+        isFriendlyFireDisabled = plugin.getConfig().getBoolean("disable-friendly-fire");
+        isAdvancementsEnbaled = plugin.getConfig().getBoolean("enable-advancements");
+        isTeamChestsEnabled = plugin.getConfig().getBoolean("enable-team-chests");
+
+        isTabEnabled = plugin.getConfig().getBoolean("server-tablist-enabled");
+        tabHeader = plugin.getConfig().getStringList("server-tablist-header");
+        tabFooter = plugin.getConfig().getStringList("server-tablist-footer");
     }
 
     public String getLocale() {

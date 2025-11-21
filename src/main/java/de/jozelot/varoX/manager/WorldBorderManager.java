@@ -1,6 +1,7 @@
 package de.jozelot.varoX.manager;
 
 import de.jozelot.varoX.VaroX;
+import de.jozelot.varoX.files.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
@@ -13,10 +14,10 @@ public class WorldBorderManager {
     private BukkitTask borderTask;
     private final StatesManager statesManager;
 
-    public WorldBorderManager(VaroX plugin, ConfigManager configManager, StatesManager statesManager) {
+    public WorldBorderManager(VaroX plugin) {
         this.plugin = plugin;
-        this.configManager = configManager;
-        this.statesManager = statesManager;
+        this.configManager = plugin.getConfigManager();
+        this.statesManager = plugin.getStatesManager();
     }
 
     public void startWorldBorderSystem() {

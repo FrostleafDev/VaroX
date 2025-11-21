@@ -1,7 +1,7 @@
 package de.jozelot.varoX.manager;
 
 import de.jozelot.varoX.VaroX;
-import org.bukkit.plugin.java.JavaPlugin;
+import de.jozelot.varoX.files.FileManager;
 
 import java.io.File;
 
@@ -12,10 +12,10 @@ public class StatesManager {
 
     private final File gameStateFile;
 
-    public StatesManager(FileManager fileManager, VaroX plugin) {
-        this.fileManager = fileManager;
-        this.gameStateFile = fileManager.getGameStateFile();
+    public StatesManager(VaroX plugin) {
         this.plugin = plugin;
+        this.fileManager = plugin.getFileManager();
+        this.gameStateFile = fileManager.getGameStateFile();
     }
 
     public int getGameState() {

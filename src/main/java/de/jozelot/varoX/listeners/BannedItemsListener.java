@@ -1,7 +1,8 @@
 package de.jozelot.varoX.listeners;
 
-import de.jozelot.varoX.manager.ConfigManager;
-import de.jozelot.varoX.manager.LangManager;
+import de.jozelot.varoX.VaroX;
+import de.jozelot.varoX.files.ConfigManager;
+import de.jozelot.varoX.files.LangManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,14 +18,16 @@ import java.util.List;
 
 public class BannedItemsListener implements Listener {
 
+    private final VaroX plugin;
     private final ConfigManager configManager;
     private final LangManager lang;
     private final String BAN_MESSAGE;
 
-    public BannedItemsListener(ConfigManager configManager, LangManager lang) {
-        this.configManager = configManager;
-        this.lang = lang;
-        BAN_MESSAGE = lang.getBannedItemAlert();
+    public BannedItemsListener(VaroX plugin) {
+        this.plugin = plugin;
+        this.configManager = plugin.getConfigManager();
+        this.lang = plugin.getLangManager();
+        BAN_MESSAGE = this.lang.getBannedItemAlert();
     }
 
     private String getMaterialNameForConfig(Material material) {

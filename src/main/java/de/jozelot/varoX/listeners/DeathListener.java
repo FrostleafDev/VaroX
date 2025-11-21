@@ -1,11 +1,12 @@
 package de.jozelot.varoX.listeners;
 
-import de.jozelot.varoX.manager.LangManager;
-import de.jozelot.varoX.manager.TeamsManager;
-import de.jozelot.varoX.manager.User;
-import de.jozelot.varoX.manager.UserManager;
+import de.jozelot.varoX.VaroX;
+import de.jozelot.varoX.files.ConfigManager;
+import de.jozelot.varoX.files.LangManager;
+import de.jozelot.varoX.teams.TeamsManager;
+import de.jozelot.varoX.user.User;
+import de.jozelot.varoX.user.UserManager;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -13,9 +14,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerAchievementAwardedEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -24,17 +25,19 @@ public class DeathListener implements Listener {
 
     private final Map<UUID, CombatInfo> combatLog = new HashMap<>();
     private final long TIMEOUT_SECONDS = 10; // Hinweis: Wert sollte aus Config kommen
-    private final JavaPlugin plugin;
+    private final VaroX plugin;
     private final Set<UUID> waitingForKick = new HashSet<>();
     private final LangManager lang;
     private final UserManager userManager;
     private final TeamsManager teamsManager;
+    private final ConfigManager configManager;
 
-    public DeathListener(JavaPlugin plugin, LangManager lang, UserManager userManager, TeamsManager teamsManager) {
+    public DeathListener(VaroX plugin) {
         this.plugin = plugin;
-        this.lang = lang;
-        this.userManager = userManager;
-        this.teamsManager = teamsManager;
+        this.lang = plugin.getLangManager();
+        this.userManager = plugin.getUserManager();
+        this.teamsManager = plugin.getTeamsManager();
+        this.configManager = plugin.getConfigManager();
     }
 
     private static class CombatInfo {
@@ -171,5 +174,12 @@ public class DeathListener implements Listener {
         if (waitingForKick.contains(event.getPlayer().getUniqueId())) {
             waitingForKick.remove(event.getPlayer().getUniqueId());
         }
+    }
+    @EventHandler
+    public void onAdvancement(PlayerAchievementAwardedEvent event) {
+        if (configManager.isAdvancementsEnbaled()) {
+            return;
+        }
+        event.setCancelled(true);
     }
 }

@@ -38,6 +38,9 @@ command-varo-start-prephase: "§c{varo_name} befindet sich noch in der Vorbereit
 command-varo-start-running: '§c{varo_name} läuft bereits.'
 command-varo-start-stopped: "§c{varo_name} wurde bereits beendet. Nutze '/varo reset', um neuzustarten."
 command-varo-start-success: '§a{varo_name} wird gestartet!'
+command-varo-to-many-player: '§c{varo_name} kann nicht gestartet werden, solange es nicht mindestens für jeden registrierten Spieler einen Spawn gibt.'
+command-varo-to-many-player-spawn-count: '§7Spawns: §b{spawns_count}'
+command-varo-to-many-player-player-count: '§7Spieler: §b{player_count}'
 
 ### /VARO END ###
 command-varo-end-already: '§c{varo_name} ist bereits beendet.'
@@ -61,7 +64,7 @@ command-varo-reset-user: '§e{varo_name} §4wurde frühzeitig beendet.'
 # Nachricht für Admins (erste Zeile).
 command-varo-reset-admin-firstline: '§e{varo_name} §4wurde frühzeitig beendet und zurückgesetzt.'
 # Nachricht für Admins (zweite Zeile, Hinweis zur Weltlöschung).
-command-varo-reset-admin-secondline: '§4Ein Admin muss jetzt die 3 Welten-Ordner manuell löschen!'
+command-varo-reset-admin-secondline: '§cEin Admin muss jetzt die 3 Welten-Ordner manuell löschen!'
 
 ### /VARO RELOAD ###
 command-varo-reload-success: '§aDas Plugin wurde erfolgreich neu geladen!'
@@ -73,38 +76,38 @@ command-varo-reload-success: '§aDas Plugin wurde erfolgreich neu geladen!'
 ### Team Hinzufügen (ADD) ###
 
 # Variablen: {team_name}, {team_size}
-command-varo-team-add-created: "§aTeam '{team_name}' mit {team_size} Mitgliedern erstellt."
+command-varo-team-add-created: "§aTeam §e{team_name}§a mit §e{team_size} §aMitgliedern erstellt."
 # Variablen: {player_names}
-command-varo-team-add-warning: "§eWarnung: Folgende Spieler konnten nicht auf Existenz geprüft werden und wurden trotzdem hinzugefügt (riskant): {player_names}"
+command-varo-team-add-warning: "§eWarnung: Folgende Spieler konnten nicht auf Existenz geprüft werden und wurden trotzdem hinzugefügt (riskant): §e{player_names}"
 # Variablen: {team_name}
-command-varo-team-add-exists: "§cTeam '{team_name}' existiert bereits."
+command-varo-team-add-exists: "§cTeam §e{team_name}§c existiert bereits."
 
 ### Team Entfernen (REMOVE) ###
 
 # Variablen: {team_name}, {team_id}
-command-varo-team-remove-success: "§aTeam '{team_name}' (ID: '{team_id}') wurde erfolgreich gelöscht."
+command-varo-team-remove-success: "§aTeam §e{team_name}§a (ID: §e{team_id}§a) wurde erfolgreich gelöscht."
 # Variablen: {team_name}
-command-varo-team-remove-error: "§cTeam '{team_name}' konnte nicht gelöscht werden."
+command-varo-team-remove-error: "§cTeam §e{team_name}§c konnte nicht gelöscht werden."
 # Variablen: {team_name}
-command-varo-team-remove-not-found: "§cTeam '{team_name}' konnte nicht gelöscht werden, weil es nicht existiert."
+command-varo-team-remove-not-found: "§cTeam §e{team_name}§c konnte nicht gelöscht werden, weil es nicht existiert."
 
 ### Team Mitglied Hinzufügen (ADDMEMBER) ###
 
 # Variablen: {player_name}, {team_name}
-command-varo-team-addmember-already: "§c'{player_name}' ist bereits im Team '{team_name}'."
+command-varo-team-addmember-already: "§c§e{player_name}§c ist bereits im Team §e{team_name}§e."
 # Variablen: {player_name}, {team_name}
-command-varo-team-addmember-success: "§a'{player_name}' wurde erfolgreich zu Team '{team_name}' hinzugefügt."
+command-varo-team-addmember-success: "§e{player_name}§a wurde erfolgreich zu Team §e{team_name}§a hinzugefügt."
 # Variablen: {team_name}
-command-varo-team-addmember-not-found: "§cTeam '{team_name}' existiert nicht."
+command-varo-team-addmember-not-found: "§cTeam §e{team_name}§c existiert nicht."
 
 ### Team Mitglied Entfernen (REMOVEMEMBER) ###
 
 # Variablen: {player_name}, {team_name}
-command-varo-team-removemember-success: "§a'{player_name}' wurde erfolgreich aus Team '{team_name}' entfernt."
+command-varo-team-removemember-success: "§e{player_name}§a wurde erfolgreich aus Team §e{team_name}§a entfernt."
 # Variablen: {player_name}, {team_name}
-command-varo-team-removemember-not-a-member: "§c'{player_name}' ist kein Mitglied von Team '{team_name}'."
+command-varo-team-removemember-not-a-member: "§e{player_name}§c ist kein Mitglied von Team §e{team_name}§c."
 # Variablen: {team_name}
-command-varo-team-removemember-not-found: "§cTeam '{team_name}' existiert nicht."
+command-varo-team-removemember-not-found: "§cTeam §e{team_name}§c existiert nicht."
 
 ### Team Liste (LIST) ###
 command-varo-team-list-no-team: '§cEs sind noch keine Teams registriert.'
@@ -125,16 +128,16 @@ command-varo-team-list-success-alive: '§aALIVE'
 ### Spawn Hinzufügen (ADD) ###
 
 # Variablen: {spawn_id}
-command-varo-spawn-add-exists: "§cEin Spawn mit ID {spawn_id} existiert bereits."
+command-varo-spawn-add-exists: "§cEin Spawn mit ID §e{spawn_id}§c existiert bereits."
 # Variablen: {spawn_id}
-command-varo-spawn-add-success: "§aSpawn mit ID {spawn_id} wurde erfolgreich erstellt."
+command-varo-spawn-add-success: "§aSpawn mit ID §e{spawn_id}§a wurde erfolgreich erstellt."
 
 ### Spawn Entfernen (REMOVE) ###
 
 # Variablen: {spawn_id}
-command-varo-spawn-remove-success: "§aSpawn mit ID {spawn_id} wurde erfolgreich gelöscht."
+command-varo-spawn-remove-success: "§aSpawn mit ID §e{spawn_id}§a wurde erfolgreich gelöscht."
 # Variablen: {spawn_id}
-command-varo-spawn-remove-not-found: "§cSpawn mit ID {spawn_id} konnte nicht gelöscht werden, weil er nicht existiert."
+command-varo-spawn-remove-not-found: "§cSpawn mit ID §e{spawn_id}§c konnte nicht gelöscht werden, weil er nicht existiert."
 
 ### Spawn Liste (LIST) ###
 command-varo-spawn-list-no-spawn: '§cEs sind noch keine Spawns registriert.'
@@ -193,3 +196,18 @@ login-finish: '§cDu bist nun verwundbar!'
 
 ### Verbotene Items ###
 banned-item-alert: '§4Dieses Item wurde von {varo_name} explizit verboten!'
+
+### WINNER ###
+winner-found-one: '§e{winner_name} hat {varo_name} gewonnen'
+winner-found-two: '§e{winner_name} und {winner_name2} haben {varo_name} gewonnen'
+winner-found-more: '§eTeam {team_name} hat {varo_name} gewonnen'
+
+###  TEAM CHESTS ###
+teamchest-success: "§aTeam-Kiste erfolgreich erstellt!"
+teamchest-removed: "§aTeam-Kiste wurde entfernt."
+teamchest-fail-not-in-team: "§cDu musst in einem Team sein, um eine Team-Kiste zu erstellen!"
+teamchest-fail-attach-error: "§cFehler: Das Schild muss an einer Kiste angebracht werden."
+teamchest-fail-no-chest: "§cDu kannst Team-Kisten nur an Kisten anbringen!"
+teamchest-fail-already-registered: "§cDiese Kiste ist bereits als Team-Kiste registriert."
+teamchest-access-denied: "§cDiese Kiste gehört Team §e{team_name}§c und kann nicht geöffnet werden."
+teamchest-break-denied: "§cDu darfst diese Team-Kiste nicht abbauen!"

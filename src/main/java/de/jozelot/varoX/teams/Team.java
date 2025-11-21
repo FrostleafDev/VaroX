@@ -1,7 +1,6 @@
-package de.jozelot.varoX.manager; // Passen Sie das Paket ggf. an
+package de.jozelot.varoX.teams; // Passen Sie das Paket ggf. an
 
 import java.util.List;
-import java.util.UUID;
 
 public class Team {
     private int id;

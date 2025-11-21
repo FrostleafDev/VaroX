@@ -1,23 +1,26 @@
 package de.jozelot.varoX.commands;
 
 import de.jozelot.varoX.VaroX;
+import de.jozelot.varoX.files.ConfigManager;
+import de.jozelot.varoX.files.FileManager;
+import de.jozelot.varoX.files.LangManager;
 import de.jozelot.varoX.manager.*;
+import de.jozelot.varoX.spawns.Spawn;
+import de.jozelot.varoX.spawns.SpawnManager;
+import de.jozelot.varoX.teams.Team;
+import de.jozelot.varoX.teams.TeamsManager;
+import de.jozelot.varoX.user.UserManager;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.io.BukkitObjectInputStream;
 
-import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class VaroCommand implements CommandExecutor {
 
@@ -31,16 +34,16 @@ public class VaroCommand implements CommandExecutor {
     private final SpawnManager spawnManager;
     private final UserManager userManager;
 
-    public VaroCommand(ConfigManager config, LangManager lang, FileManager fileManager, StatesManager statesManager, VaroX plugin, WorldBorderManager worldBorderManager, TeamsManager teamsManager, SpawnManager spawnManager, UserManager userManager) {
-        this.config = config;
-        this.lang = lang;
-        this.fileManager = fileManager;
-        this.statesManager = statesManager;
+    public VaroCommand(VaroX plugin) {
         this.plugin = plugin;
-        this.worldBorderManager = worldBorderManager;
-        this.teamsManager = teamsManager;
-        this.spawnManager = spawnManager;
-        this.userManager = userManager;
+        this.config = plugin.getConfigManager();
+        this.lang = plugin.getLangManager();
+        this.fileManager = plugin.getFileManager();
+        this.statesManager = plugin.getStatesManager();
+        this.worldBorderManager = plugin.getWorldBorderManager();
+        this.teamsManager = plugin.getTeamsManager();
+        this.spawnManager = plugin.getSpawnManager();
+        this.userManager = plugin.getUserManager();
     }
 
     private boolean varoStarting = false;
@@ -72,6 +75,31 @@ public class VaroCommand implements CommandExecutor {
                     sender.sendMessage(lang.getCommandVaroStartStopped());
                     return true;
                 }
+                int playerCount = 0;
+                int spawnsCount = 0;
+
+                for (Spawn spawn : spawnManager.getAllSpawns()) {
+                    spawnsCount++;
+                }
+                for (Team team : teamsManager.getAllTeams()) {
+                    for (String player : team.getMembers()) {
+                        playerCount++;
+                    }
+                }
+
+                if (playerCount > spawnsCount) {
+                    sender.sendMessage(lang.format("command-varo-to-many-player", null));
+
+                    Map<String, String> varsSpawns = new HashMap<>();
+                    varsSpawns.put("spawns_count", String.valueOf(spawnsCount));
+                    sender.sendMessage(lang.format("command-varo-to-many-player-spawn-count", varsSpawns));
+
+                    Map<String, String> varsPlayers = new HashMap<>();
+                    varsPlayers.put("player_count", String.valueOf(playerCount));
+                    sender.sendMessage(lang.format("command-varo-to-many-player-player-count", varsPlayers));
+                    return true;
+                }
+
                 sender.sendMessage(lang.getCommandVaroStartSuccess());
                 plugin.getLogger().info("Varo started by " + sender.getName());
                 varoStarting = true;
@@ -105,6 +133,31 @@ public class VaroCommand implements CommandExecutor {
                     sender.sendMessage(lang.getCommandVaroOpenAlready());
                     return true;
                 }
+                int playerCount = 0;
+                int spawnsCount = 0;
+
+                for (Spawn spawn : spawnManager.getAllSpawns()) {
+                    spawnsCount++;
+                }
+                for (Team team : teamsManager.getAllTeams()) {
+                    for (String player : team.getMembers()) {
+                        playerCount++;
+                    }
+                }
+
+                if (playerCount > spawnsCount) {
+                    sender.sendMessage(lang.format("command-varo-to-many-player", null));
+
+                    Map<String, String> varsSpawns = new HashMap<>();
+                    varsSpawns.put("spawns_count", String.valueOf(spawnsCount));
+                    sender.sendMessage(lang.format("command-varo-to-many-player-spawn-count", varsSpawns));
+
+                    Map<String, String> varsPlayers = new HashMap<>();
+                    varsPlayers.put("player_count", String.valueOf(playerCount));
+                    sender.sendMessage(lang.format("command-varo-to-many-player-player-count", varsPlayers));
+                    return true;
+                }
+
                 statesManager.setGameState(1);
                 plugin.getLogger().info("Varo opened by " + sender.getName());
                 sender.sendMessage(lang.getCommandVaroOpen());
@@ -140,6 +193,7 @@ public class VaroCommand implements CommandExecutor {
                 userManager.deleteAllUsers();
                 teamsManager.deleteAllTeams();
                 spawnManager.deleteAllSpawns();
+                statesManager.clearWorldBorderState();
                 new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -526,6 +580,11 @@ public class VaroCommand implements CommandExecutor {
                             team.setAlive(false);
                             plugin.getLogger().info("Team " + team.getName() + " ist leer und wurde auf TOT gesetzt.");
                         }
+                        if (team.getMembers().isEmpty() && team.isAlive()) { // Nur prüfen, wenn es noch 'alive' ist
+                            team.setAlive(false);
+                            plugin.getLogger().info("Team " + team.getName() + " ist leer und wurde auf TOT gesetzt.");
+                        }
+                        teamsManager.updateTeam(team);
                     }
 
                     Bukkit.broadcastMessage(lang.getVaroStart());

@@ -1,6 +1,7 @@
 package de.jozelot.varoX.listeners;
 
-import de.jozelot.varoX.manager.ConfigManager;
+import de.jozelot.varoX.VaroX;
+import de.jozelot.varoX.files.ConfigManager;
 import de.jozelot.varoX.manager.StatesManager;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Entity;
@@ -14,18 +15,17 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class PreGamePhaseEventBlock implements Listener {
 
-    private final JavaPlugin plugin;
+    private final VaroX plugin;
     private final ConfigManager config;
     private final StatesManager statesManager;
 
-    public PreGamePhaseEventBlock(JavaPlugin plugin, ConfigManager config, StatesManager statesManager) {
+    public PreGamePhaseEventBlock(VaroX plugin) {
         this.plugin = plugin;
-        this.config = config;
-        this.statesManager = statesManager;
+        this.config = plugin.getConfigManager();
+        this.statesManager = plugin.getStatesManager();
     }
 
     @EventHandler
@@ -47,7 +47,7 @@ public class PreGamePhaseEventBlock implements Listener {
         }
 
         Player player = (Player) event.getEntity();
-        if (statesManager.getGameState() == 1 && !(player.getGameMode().equals(GameMode.CREATIVE))) {
+        if ((statesManager.getGameState() == 1 || statesManager.getGameState() == 3) && !(player.getGameMode().equals(GameMode.CREATIVE))) {
             event.setCancelled(true);
         }
     }
@@ -58,7 +58,7 @@ public class PreGamePhaseEventBlock implements Listener {
         }
 
         Player player = (Player) event.getEntity();
-        if (statesManager.getGameState() == 1 && !(player.getGameMode().equals(GameMode.CREATIVE))) {
+        if ((statesManager.getGameState() == 1 || statesManager.getGameState() == 3) && !(player.getGameMode().equals(GameMode.CREATIVE))) {
             event.setCancelled(true);
         }
     }
@@ -82,7 +82,7 @@ public class PreGamePhaseEventBlock implements Listener {
             return;
         }
         Player player = (Player) event.getTarget();
-        if (statesManager.getGameState() == 1 && !(player.getGameMode().equals(GameMode.CREATIVE))) {
+        if ((statesManager.getGameState() == 1 || statesManager.getGameState() == 3) && !(player.getGameMode().equals(GameMode.CREATIVE))) {
             event.setCancelled(true);
         }
     }

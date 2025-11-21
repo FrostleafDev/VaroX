@@ -1,25 +1,27 @@
-package de.jozelot.varoX.manager;
+package de.jozelot.varoX.files;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import org.bukkit.plugin.java.JavaPlugin;
+import de.jozelot.varoX.VaroX;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FileManager {
 
-    private final JavaPlugin plugin;
+    private final VaroX plugin;
 
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    public FileManager(JavaPlugin plugin) {
+    public FileManager(VaroX plugin) {
         this.plugin = plugin;
     }
 
@@ -32,12 +34,14 @@ public class FileManager {
         getSpawnsFile();
         getTeamsFile();
         getGameStateFile();
+        getTeamChestsFile();
     }
 
     private void saveDefaultLocales() {
         plugin.saveResource("locales/de.yml", false);
         plugin.saveResource("locales/en.yml", false);
     }
+
 
     public <T> T load(File file, String key, Class<T> type) {
         try (FileReader reader = new FileReader(file)) {
@@ -73,73 +77,98 @@ public class FileManager {
         }
     }
 
+
+    public <T> List<T> loadList(File file, Type listType) {
+        try (FileReader reader = new FileReader(file)) {
+            List<T> loadedList = gson.fromJson(reader, listType);
+            return loadedList != null ? loadedList : new ArrayList<>();
+        } catch (IOException e) {
+            plugin.getLogger().warning("File not found or IO error for: " + file.getName() + " -> " + e.getMessage());
+        } catch (Exception e) {
+            plugin.getLogger().warning("Could not parse JSON list for: " + file.getName() + ". Initializing with empty list: " + e.getMessage());
+        }
+        return new ArrayList<>();
+    }
+
+    public void saveList(File file, Object list) {
+        try (FileWriter writer = new FileWriter(file)) {
+            gson.toJson(list, writer);
+        } catch (IOException e) {
+            plugin.getLogger().severe("ERROR while saving list to file: " + file.getName() + " -> " + e.getMessage());
+        }
+    }
+
+
     public File getGameStateFile() {
         File dataDir = new File(plugin.getDataFolder(), "data");
-
         File stateFile = new File(dataDir, "states.json");
-
         if (!stateFile.exists()) {
             try {
                 if (stateFile.createNewFile()) {
                     initializeGameStateFile(stateFile);
                 }
-                } catch (IOException e) {
+            } catch (IOException e) {
                 plugin.getLogger().severe("ERROR while trying to create 'states.json': " + e.getMessage());
             }
         }
-
         return stateFile;
     }
+
     public File getTeamsFile() {
         File dataDir = new File(plugin.getDataFolder(), "data");
-
-        File stateFile = new File(dataDir, "teams.json");
-
-        if (!stateFile.exists()) {
+        File teamsFile = new File(dataDir, "teams.json");
+        if (!teamsFile.exists()) {
             try {
-                stateFile.createNewFile();
+                teamsFile.createNewFile();
             } catch (IOException e) {
-                plugin.getLogger().severe("ERROR while trying to create 'states.json': " + e.getMessage());
+                plugin.getLogger().severe("ERROR while trying to create 'teams.json': " + e.getMessage()); // Korrigiert
             }
         }
-
-        return stateFile;
+        return teamsFile;
     }
+
+    public File getTeamChestsFile() {
+        File dataDir = new File(plugin.getDataFolder(), "data");
+        File chestsFile = new File(dataDir, "team_chests.json");
+        if (!chestsFile.exists()) {
+            try {
+                chestsFile.createNewFile();
+            } catch (IOException e) {
+                plugin.getLogger().severe("ERROR while trying to create 'team_chests.json': " + e.getMessage());
+            }
+        }
+        return chestsFile;
+    }
+
     public File getSpawnsFile() {
         File dataDir = new File(plugin.getDataFolder(), "data");
-
-        File stateFile = new File(dataDir, "spawns.json");
-
-        if (!stateFile.exists()) {
+        File spawnsFile = new File(dataDir, "spawns.json");
+        if (!spawnsFile.exists()) {
             try {
-                stateFile.createNewFile();
+                spawnsFile.createNewFile();
             } catch (IOException e) {
-                plugin.getLogger().severe("ERROR while trying to create 'states.json': " + e.getMessage());
+                plugin.getLogger().severe("ERROR while trying to create 'spawns.json': " + e.getMessage());
             }
         }
-
-        return stateFile;
+        return spawnsFile;
     }
+
     public File getPlayerFile() {
         File dataDir = new File(plugin.getDataFolder(), "data");
-
-        File stateFile = new File(dataDir, "playerdata.json");
-
-        if (!stateFile.exists()) {
+        File playerFile = new File(dataDir, "playerdata.json");
+        if (!playerFile.exists()) {
             try {
-                stateFile.createNewFile();
+                playerFile.createNewFile();
             } catch (IOException e) {
-                plugin.getLogger().severe("ERROR while trying to create 'states.json': " + e.getMessage());
+                plugin.getLogger().severe("ERROR while trying to create 'playerdata.json': " + e.getMessage());
             }
         }
-
-        return stateFile;
+        return playerFile;
     }
 
     private void initializeGameStateFile(File file) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-        // {"game_state": 0}
         Map<String, Integer> initialState = new HashMap<>();
         initialState.put("game_state", 0);
 
