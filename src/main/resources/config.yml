@@ -106,7 +106,7 @@ enable-start-protection: true
 
 # Duration of the start protection in seconds. During this time, players
 # cannot attack each other or inflict damage.
-start-protection-time: 30 # (10 seconds)
+start-protection-time: 30
 
 # ========================================================================= #
 #                         III. WORLDBORDER & MAP                            #
