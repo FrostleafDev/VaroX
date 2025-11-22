@@ -73,7 +73,7 @@ version: 1.0.0
 # The language to be used for all plugin messages (e.g., de or en).
 # Make sure the corresponding locale file exists (locales/de.yml).
 # Languages availabel: de, en, fr, es, ru
-locale: de
+locale: en
 
 # The display name for the Varo event.
 varo-name: 'VaroX'
@@ -201,6 +201,9 @@ player-out-by-non-player-death: true
 # The amount of time the last hit by a player on death is ago.
 killed-by-player-time: 10
 
+# If edvancements should be enabled
 enable-advancements: false
 
+# Should the team chest system be enabled?
+# You can create teamchest by being in a team and placing a sign with the text [TEAM] on it.
 enable-team-chests: true
