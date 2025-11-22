@@ -8,13 +8,14 @@ import de.jozelot.varoX.teamchests.TeamChestManager;
 import de.jozelot.varoX.teams.TeamsManager;
 import de.jozelot.varoX.teams.Team;
 import org.bukkit.ChatColor;
+import org.bukkit.Location; // Hinzugefügt
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.material.Attachable; // Dies ist die 1.8.8-kompatible Klasse
+import org.bukkit.material.Attachable;
 import org.bukkit.block.BlockFace;
 
 import java.util.Optional;
@@ -39,7 +40,6 @@ public class SignListener implements Listener {
 
     @EventHandler
     public void onSignChange(SignChangeEvent event) {
-        System.out.println("SignChangeeeeee");
         if (!config.isTeamChestsEnabled()) return;
 
         Player player = event.getPlayer();
@@ -89,13 +89,15 @@ public class SignListener implements Listener {
             return;
         }
 
-        if (chestManager.getChestAt(attachedBlock.getLocation()) != null) {
+        Location normalizedChestLoc = chestManager.normalizeChestLocation(attachedBlock.getLocation());
+
+        if (chestManager.getChestAt(normalizedChestLoc) != null) {
             player.sendMessage(lang.format("teamchest-fail-already-registered", null));
             event.setCancelled(true);
             return;
         }
 
-        TeamChest newChest = new TeamChest(team.getName(), attachedBlock.getLocation(), event.getBlock().getLocation());
+        TeamChest newChest = new TeamChest(team.getName(), normalizedChestLoc, event.getBlock().getLocation());
         chestManager.registerChest(newChest);
 
         event.setLine(0, ChatColor.DARK_BLUE + TEAM_CHEST_TAG);

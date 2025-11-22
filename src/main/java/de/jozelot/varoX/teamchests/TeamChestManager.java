@@ -4,10 +4,12 @@ import com.google.gson.reflect.TypeToken;
 import de.jozelot.varoX.VaroX;
 import de.jozelot.varoX.files.FileManager;
 import org.bukkit.Location;
+import org.bukkit.Material; // Hinzugefügt
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace; // Hinzugefügt
+import org.bukkit.block.BlockState;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.block.BlockState; // Fügen Sie diesen Import hinzu
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -35,32 +37,35 @@ public class TeamChestManager {
 
     public Location normalizeChestLocation(Location loc) {
         Block block = loc.getBlock();
+        Material type = block.getType();
 
-        if (block.getState() instanceof InventoryHolder) {
-            InventoryHolder holder = (InventoryHolder) block.getState();
+        if (type != Material.CHEST && type != Material.TRAPPED_CHEST) {
+            return loc;
+        }
 
-            if (holder instanceof DoubleChest) {
-                DoubleChest dc = (DoubleChest) holder;
+        Location normalizedLoc = loc;
 
-                InventoryHolder left = dc.getLeftSide();
-                InventoryHolder right = dc.getRightSide();
+        BlockFace[] faces = new BlockFace[] {
+                BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST
+        };
 
-                if (left instanceof BlockState && right instanceof BlockState) {
-                    Location locA = ((BlockState) left).getLocation();
-                    Location locB = ((BlockState) right).getLocation();
+        for (BlockFace face : faces) {
+            Block neighbor = block.getRelative(face);
 
-                    if (locA.getBlockX() < locB.getBlockX() ||
-                            (locA.getBlockX() == locB.getBlockX() && locA.getBlockZ() < locB.getBlockZ())) {
+            if (neighbor.getType() == type) {
 
-                        return locA;
-                    } else {
-                        return locB;
-                    }
+                Location neighborLoc = neighbor.getLocation();
+
+                if (neighborLoc.getBlockX() < normalizedLoc.getBlockX() ||
+                        (neighborLoc.getBlockX() == normalizedLoc.getBlockX() && neighborLoc.getBlockZ() < normalizedLoc.getBlockZ())) {
+
+                    // Der Nachbar ist die Hauptkiste
+                    normalizedLoc = neighborLoc;
                 }
             }
         }
 
-        return loc; // Einzelkiste oder kein Kasten
+        return normalizedLoc;
     }
 
     public void registerChest(TeamChest chest) {

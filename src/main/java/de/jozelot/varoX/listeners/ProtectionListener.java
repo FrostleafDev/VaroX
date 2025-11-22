@@ -42,7 +42,8 @@ public class ProtectionListener implements Listener {
     }
 
     private boolean isTeamChest(Location loc) {
-        return chestManager.getChestAt(loc) != null;
+        Location normalizedLoc = chestManager.normalizeChestLocation(loc);
+        return chestManager.getChestAt(normalizedLoc) != null;
     }
 
     @EventHandler
@@ -53,6 +54,9 @@ public class ProtectionListener implements Listener {
 
         Block block = event.getClickedBlock();
         Player player = event.getPlayer();
+
+        plugin.getLogger().info("--- Interact Test ---");
+        plugin.getLogger().info("Clicked Block: " + block.getType());
 
         if (player.getGameMode() == GameMode.CREATIVE) {
             return;
@@ -70,17 +74,50 @@ public class ProtectionListener implements Listener {
                 }
             }
 
-            TeamChest chest = chestManager.getChestAt(targetLoc);
-            if (chest == null) return;
+            plugin.getLogger().info("1. Target Location (clicked/attached): " + targetLoc.toVector());
+            Location normalizedTargetLoc = chestManager.normalizeChestLocation(targetLoc);
+            plugin.getLogger().info("2. Normalized Location: " + normalizedTargetLoc.toVector());
+
+            TeamChest chest = chestManager.getChestAt(normalizedTargetLoc);
+
+            if (chest == null) {
+                plugin.getLogger().info("3. TeamChest NICHT gefunden (kein Schutz aktiv).");
+                plugin.getLogger().info("---------------------------------------------");
+                return;
+            }
+
+            plugin.getLogger().info("3. TeamChest GEVUNDEN (Team: " + chest.getTeamName() + ")");
+
+            Optional<Team> teamOpt = teamsManager.getTeamByName(chest.getTeamNameKey());
+
+            if (!teamOpt.isPresent()) {
+                plugin.getLogger().warning("Team der Truhe (" + chest.getTeamNameKey() + ") existiert nicht mehr. Zugriff erlaubt.");
+                plugin.getLogger().info("---------------------------------------------");
+                return;
+            }
+
+            Team chestTeam = teamOpt.get();
+
+            if (!chestTeam.isAlive()) {
+                plugin.getLogger().info("4. Team ist ausgeschieden. Zugriff für alle erlaubt.");
+                plugin.getLogger().info("---------------------------------------------");
+                return;
+            }
 
             Optional<Team> playerTeamOpt = teamsManager.getTeamOfPlayer(player.getName());
+
 
             if (!playerTeamOpt.isPresent() || !playerTeamOpt.get().getName().equalsIgnoreCase(chest.getTeamNameKey())) {
                 event.setCancelled(true);
 
+                plugin.getLogger().warning("6. Zugriff VERWEIGERT. Event gecancelled.");
+                plugin.getLogger().info("---------------------------------------------");
                 Map<String, String> vars = new HashMap<>();
                 vars.put("team_name", chest.getTeamName());
                 player.sendMessage(lang.format("teamchest-access-denied", vars));
+            }else {
+                plugin.getLogger().info("6. Zugriff ERLAUBT (Spieler im Team).");
+                plugin.getLogger().info("---------------------------------------------");
             }
         }
     }
@@ -96,17 +133,22 @@ public class ProtectionListener implements Listener {
             return;
         }
         TeamChest chest = null;
+        Location chestLoc = null;
 
         if (block.getType() == Material.CHEST || block.getType() == Material.TRAPPED_CHEST) {
-            chest = chestManager.getChestAt(block.getLocation());
+            chestLoc = block.getLocation();
         } else if (block.getState() instanceof org.bukkit.block.Sign) {
 
             try {
-                Location chestLoc = block.getRelative(((Attachable) block.getState().getData()).getAttachedFace()).getLocation();
-                chest = chestManager.getChestAt(chestLoc);
+                chestLoc = block.getRelative(((Attachable) block.getState().getData()).getAttachedFace()).getLocation();
             } catch (ClassCastException ignored) {
             }
         }
+
+        if (chestLoc == null) return;
+
+        Location normalizedChestLoc = chestManager.normalizeChestLocation(chestLoc);
+        chest = chestManager.getChestAt(normalizedChestLoc);
 
         if (chest == null) return;
 
