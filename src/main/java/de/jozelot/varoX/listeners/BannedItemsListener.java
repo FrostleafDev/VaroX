@@ -9,11 +9,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent; // Ersetzt PlayerPickupItemEvent
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 public class BannedItemsListener implements Listener {
@@ -29,36 +34,34 @@ public class BannedItemsListener implements Listener {
         this.lang = plugin.getLangManager();
         BAN_MESSAGE = this.lang.getBannedItemAlert();
     }
-
-    private String getMaterialNameForConfig(Material material) {
-        String name = material.name();
-
-        if (name.equals("EYE_OF_ENDER")) {
-            return "ENDER_EYE";
-        } else if (name.equals("SKULL") || name.equals("SKULL_BLOCK")) {
-            return "SKULL";
-        }
-        return name;
-    }
-
-    private boolean isPotionBanned(ItemStack itemStack) {
-        if (itemStack.getType() != Material.POTION) {
+    private boolean isPotionBanned(@Nullable ItemStack itemStack) {
+        if (itemStack == null || !itemStack.getType().name().contains("POTION")) {
             return false;
         }
 
-        short potionData = itemStack.getDurability();
+        if (itemStack.getItemMeta() instanceof PotionMeta potionMeta) {
+            PotionData potionData = potionMeta.getBasePotionData();
+            PotionType type = potionData.getType();
 
-        List<String> bannedPotions = configManager.getBannedPotions();
+            String bannedString = String.format("%s:%s:%s",
+                    type.name(),
+                    potionData.isUpgraded(),
+                    potionData.isExtended());
 
-        return bannedPotions.contains(String.valueOf(potionData));
+            List<String> bannedPotions = configManager.getBannedPotions();
+
+            return bannedPotions.contains(bannedString);
+        }
+
+        return false;
     }
 
-    private boolean isBanned(ItemStack itemStack) {
+    private boolean isBanned(@Nullable ItemStack itemStack) {
         if (itemStack == null || itemStack.getType() == Material.AIR) {
             return false;
         }
 
-        if (itemStack.getType() == Material.POTION) {
+        if (itemStack.getType().name().contains("POTION")) {
             return isPotionBanned(itemStack);
         }
 
@@ -66,24 +69,7 @@ public class BannedItemsListener implements Listener {
 
         String typeName = itemStack.getType().name();
 
-        if (typeName.equals("EYE_OF_ENDER")) {
-            typeName = "ENDER_EYE";
-        } else if (typeName.equals("SKULL_ITEM") || typeName.equals("SKULL") || typeName.equals("SKULL_BLOCK")) {
-            typeName = "SKULL";
-        }
-
-        if (bannedItems.contains(typeName)) {
-            return true;
-        }
-
-        short subId = itemStack.getDurability();
-
-        if (subId != 0) {
-            String bannedStringWithData = typeName + ":" + subId;
-            return bannedItems.contains(bannedStringWithData);
-        }
-
-        return false;
+        return bannedItems.contains(typeName);
     }
 
     @EventHandler
@@ -97,7 +83,8 @@ public class BannedItemsListener implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (isBanned(event.getItemInHand())) {
+        ItemStack item = event.getItemInHand();
+        if (isBanned(item)) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(BAN_MESSAGE);
         }
@@ -105,19 +92,16 @@ public class BannedItemsListener implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        ItemStack blockAsItem = new ItemStack(event.getBlock().getType(), 1, event.getBlock().getData());
+        Material blockType = event.getBlock().getType();
 
-        if (isBanned(blockAsItem)) {
+        if (isBanned(new ItemStack(blockType))) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(BAN_MESSAGE);
             return;
         }
 
-        Material blockType = event.getBlock().getType();
-
         if (blockType.name().contains("SKULL")) {
-            ItemStack skullItem = new ItemStack(Material.SKULL_ITEM, 1, event.getBlock().getData());
-            if (isBanned(skullItem)) {
+            if (isBanned(new ItemStack(blockType))) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(BAN_MESSAGE);
             }
@@ -126,34 +110,31 @@ public class BannedItemsListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-
-        // Prüfe das Item in der Hand (Main Hand in 1.8.8)
-        ItemStack item = event.getPlayer().getItemInHand();
+        ItemStack item = event.getItem();
         Player player = event.getPlayer();
 
         if (item == null || item.getType() == Material.AIR) {
             return;
         }
-
-        if (event.getAction().name().contains("RIGHT_CLICK")) {
-
-            // Die isBanned-Methode prüft Tränke und alle anderen Items.
-            if (isBanned(item)) {
-                event.setCancelled(true);
-                player.sendMessage(BAN_MESSAGE);
-                return;
-            }
+        if (isBanned(item)) {
+            event.setCancelled(true);
+            player.sendMessage(BAN_MESSAGE);
         }
     }
 
 
     @EventHandler
-    public void onItemPickup(PlayerPickupItemEvent event) {
+    public void onItemPickup(EntityPickupItemEvent event) {
+        // EntityPickupItemEvent für moderne Spigot-Versionen
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
+
         ItemStack item = event.getItem().getItemStack();
 
         if (item != null && isBanned(item)) {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(BAN_MESSAGE);
+            player.sendMessage(BAN_MESSAGE);
         }
     }
 
@@ -162,7 +143,7 @@ public class BannedItemsListener implements Listener {
         for (int i = 0; i < 3; i++) {
             ItemStack result = event.getContents().getItem(i);
 
-            if (result != null && result.getType() == Material.POTION) {
+            if (result != null && result.getType().name().contains("POTION")) {
                 if (isPotionBanned(result)) {
                     event.setCancelled(true);
                     return;

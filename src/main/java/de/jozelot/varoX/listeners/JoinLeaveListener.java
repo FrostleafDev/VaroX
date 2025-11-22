@@ -10,7 +10,6 @@ import de.jozelot.varoX.teams.Team;
 import de.jozelot.varoX.teams.TeamsManager;
 import de.jozelot.varoX.user.User;
 import de.jozelot.varoX.user.UserManager;
-import de.jozelot.varoX.utils.TabListUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -27,6 +26,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 import java.util.function.DoubleConsumer;
+import java.util.stream.Collectors;
 
 public class JoinLeaveListener implements Listener {
 
@@ -74,8 +74,11 @@ public class JoinLeaveListener implements Listener {
             assignSpawnToPlayer(event.getPlayer());
         }
         userManager.registerUser(event.getPlayer().getName());
+
         if (config.isTabEnabled()) {
-            TabListUtil.setHeaderFooter(event.getPlayer(), config.getTabHeader(), config.getTabFooter());
+            String header = config.getTabHeader().stream().collect(Collectors.joining("\n"));
+            String footer = config.getTabFooter().stream().collect(Collectors.joining("\n"));
+            event.getPlayer().setPlayerListHeaderFooter(header, footer);
         }
     }
 

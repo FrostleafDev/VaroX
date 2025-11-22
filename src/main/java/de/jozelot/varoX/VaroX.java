@@ -1,6 +1,7 @@
 package de.jozelot.varoX;
 
 import de.jozelot.varoX.commands.VaroCommand;
+import de.jozelot.varoX.commands.VaroCommandTab;
 import de.jozelot.varoX.files.ConfigManager;
 import de.jozelot.varoX.files.FileManager;
 import de.jozelot.varoX.files.LangManager;
@@ -51,6 +52,7 @@ public final class VaroX extends JavaPlugin {
 
         // Commands Initialize
         getCommand("varo").setExecutor(new VaroCommand( this));
+        getCommand("varo").setTabCompleter(new VaroCommandTab(this));
 
         // Listener Initialize
         Bukkit.getPluginManager().registerEvents(new JoinLeaveListener(this), this);
