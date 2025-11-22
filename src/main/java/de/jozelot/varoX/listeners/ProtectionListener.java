@@ -11,6 +11,8 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Directional; // Neue API
+import org.bukkit.block.BlockFace; // Hinzugefügt
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,7 +20,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.material.Attachable;
+import org.bukkit.inventory.ItemStack;
+// import org.bukkit.material.Attachable; // Veraltet
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -55,9 +58,6 @@ public class ProtectionListener implements Listener {
         Block block = event.getClickedBlock();
         Player player = event.getPlayer();
 
-        //plugin.getLogger().info("--- Interact Test ---");
-        //plugin.getLogger().info("Clicked Block: " + block.getType());
-
         if (player.getGameMode() == GameMode.CREATIVE) {
             return;
         }
@@ -67,40 +67,31 @@ public class ProtectionListener implements Listener {
             Location targetLoc = block.getLocation();
 
             if (block.getState() instanceof org.bukkit.block.Sign) {
-                try {
-                    targetLoc = block.getRelative(((Attachable) block.getState().getData()).getAttachedFace()).getLocation();
-                } catch (ClassCastException ignored) {
+                org.bukkit.block.data.BlockData data = block.getState().getBlockData();
+                if (data instanceof Directional) {
+                    BlockFace attachedFace = ((Directional) data).getFacing().getOppositeFace();
+                    targetLoc = block.getRelative(attachedFace).getLocation();
+                } else {
                     return;
                 }
             }
 
-           // plugin.getLogger().info("1. Target Location (clicked/attached): " + targetLoc.toVector());
             Location normalizedTargetLoc = chestManager.normalizeChestLocation(targetLoc);
-           // plugin.getLogger().info("2. Normalized Location: " + normalizedTargetLoc.toVector());
-
             TeamChest chest = chestManager.getChestAt(normalizedTargetLoc);
 
             if (chest == null) {
-             //   plugin.getLogger().info("3. TeamChest NICHT gefunden (kein Schutz aktiv).");
-             //   plugin.getLogger().info("---------------------------------------------");
                 return;
             }
-
-          //  plugin.getLogger().info("3. TeamChest GEVUNDEN (Team: " + chest.getTeamName() + ")");
 
             Optional<Team> teamOpt = teamsManager.getTeamByName(chest.getTeamNameKey());
 
             if (!teamOpt.isPresent()) {
-         //       plugin.getLogger().warning("Team der Truhe (" + chest.getTeamNameKey() + ") existiert nicht mehr. Zugriff erlaubt.");
-          //      plugin.getLogger().info("---------------------------------------------");
                 return;
             }
 
             Team chestTeam = teamOpt.get();
 
             if (!chestTeam.isAlive()) {
-            //    plugin.getLogger().info("4. Team ist ausgeschieden. Zugriff für alle erlaubt.");
-           //     plugin.getLogger().info("---------------------------------------------");
                 return;
             }
 
@@ -109,15 +100,9 @@ public class ProtectionListener implements Listener {
 
             if (!playerTeamOpt.isPresent() || !playerTeamOpt.get().getName().equalsIgnoreCase(chest.getTeamNameKey())) {
                 event.setCancelled(true);
-
-               // plugin.getLogger().warning("6. Zugriff VERWEIGERT. Event gecancelled.");
-            //    plugin.getLogger().info("---------------------------------------------");
                 Map<String, String> vars = new HashMap<>();
                 vars.put("team_name", chest.getTeamName());
                 player.sendMessage(lang.format("teamchest-access-denied", vars));
-            }else {
-              //  plugin.getLogger().info("6. Zugriff ERLAUBT (Spieler im Team).");
-             //   plugin.getLogger().info("---------------------------------------------");
             }
         }
     }
@@ -139,9 +124,12 @@ public class ProtectionListener implements Listener {
             chestLoc = block.getLocation();
         } else if (block.getState() instanceof org.bukkit.block.Sign) {
 
-            try {
-                chestLoc = block.getRelative(((Attachable) block.getState().getData()).getAttachedFace()).getLocation();
-            } catch (ClassCastException ignored) {
+            org.bukkit.block.data.BlockData data = block.getState().getBlockData();
+            if (data instanceof Directional) {
+                BlockFace attachedFace = ((Directional) data).getFacing().getOppositeFace();
+                chestLoc = block.getRelative(attachedFace).getLocation();
+            } else {
+                return;
             }
         }
 
@@ -162,13 +150,16 @@ public class ProtectionListener implements Listener {
         }
 
         if (block.getType() == Material.CHEST || block.getType() == Material.TRAPPED_CHEST) {
-            chest.getSignBlock().setType(Material.AIR);
+            Block signBlock = chest.getSignBlock();
+            if (signBlock != null) {
+                signBlock.setType(Material.AIR);
+            }
             chestManager.removeChest(chest.getChestLocation());
             player.sendMessage(lang.format("teamchest-removed", null));
 
         } else if (block.getState() instanceof org.bukkit.block.Sign) {
             chestManager.removeChest(chest.getChestLocation());
-
+            player.sendMessage(lang.format("teamchest-removed", null));
         }
     }
 
@@ -185,14 +176,101 @@ public class ProtectionListener implements Listener {
             }
 
             else if (block.getState() instanceof org.bukkit.block.Sign) {
-                try {
-                    Location chestLoc = block.getRelative(((Attachable) block.getState().getData()).getAttachedFace()).getLocation();
+                org.bukkit.block.data.BlockData data = block.getState().getBlockData();
+                if (data instanceof Directional) {
+                    BlockFace attachedFace = ((Directional) data).getFacing().getOppositeFace();
+                    Location chestLoc = block.getRelative(attachedFace).getLocation();
                     if (isTeamChest(chestLoc)) {
                         it.remove();
                     }
-                } catch (ClassCastException ignored) {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onSignEdit(PlayerInteractEvent event) {
+        if (!config.isTeamChestsEnabled()) return;
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if (event.getClickedBlock() == null) return;
+
+        Block block = event.getClickedBlock();
+
+        if (!(block.getState() instanceof org.bukkit.block.Sign)) {
+            return;
+        }
+
+        Location chestLoc = null;
+        org.bukkit.block.data.BlockData data = block.getState().getBlockData();
+
+        if (data instanceof Directional) {
+            BlockFace attachedFace = ((Directional) data).getFacing().getOppositeFace();
+            chestLoc = block.getRelative(attachedFace).getLocation();
+        } else {
+            return;
+        }
+
+        if (chestLoc == null) return;
+
+        Location normalizedChestLoc = chestManager.normalizeChestLocation(chestLoc);
+        TeamChest chest = chestManager.getChestAt(normalizedChestLoc);
+
+        if (chest != null) {
+            event.setCancelled(true);
+        }
+    }
+    @EventHandler
+    public void onSignColor(PlayerInteractEvent event) {
+        if (!config.isTeamChestsEnabled()) return;
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if (event.getClickedBlock() == null) return;
+
+        ItemStack item = event.getItem();
+        if (item == null) return;
+
+        Material heldItemType = item.getType();
+
+        if (!isSignDyeOrInk(heldItemType)) {
+            return;
+        }
+
+        Block block = event.getClickedBlock();
+
+        if (!(block.getState() instanceof org.bukkit.block.Sign)) {
+            return;
+        }
+
+        Location chestLoc = null;
+        org.bukkit.block.data.BlockData data = block.getState().getBlockData();
+
+        if (data instanceof Directional) {
+            BlockFace attachedFace = ((Directional) data).getFacing().getOppositeFace();
+            chestLoc = block.getRelative(attachedFace).getLocation();
+        } else {
+            return;
+        }
+
+        if (chestLoc == null) return;
+
+        Location normalizedChestLoc = chestManager.normalizeChestLocation(chestLoc);
+        TeamChest chest = chestManager.getChestAt(normalizedChestLoc);
+
+        if (chest != null) {
+            event.setCancelled(true);
+        }
+    }
+
+    private boolean isSignDyeOrInk(Material material) {
+        String name = material.name();
+
+        if (name.endsWith("_DYE")) return true;
+
+        // Ink Sacs
+        if (name.equals("INK_SAC")) return true;
+        if (name.equals("GLOW_INK_SAC")) return true;
+
+        if (name.contains("DYE")) return true;
+
+        return false;
     }
 }

@@ -4,12 +4,12 @@ import com.google.gson.reflect.TypeToken;
 import de.jozelot.varoX.VaroX;
 import de.jozelot.varoX.files.FileManager;
 import org.bukkit.Location;
-import org.bukkit.Material; // Hinzugefügt
+import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace; // Hinzugefügt
 import org.bukkit.block.BlockState;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.block.BlockFace;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -43,6 +43,28 @@ public class TeamChestManager {
             return loc;
         }
 
+        // 1. Prüfe auf DoubleChest über InventoryHolder
+        BlockState state = block.getState();
+        if (state instanceof InventoryHolder) {
+            InventoryHolder holder = (InventoryHolder) state;
+
+            if (holder instanceof DoubleChest) {
+                DoubleChest doubleChest = (DoubleChest) holder;
+
+                InventoryHolder left = doubleChest.getLeftSide();
+                InventoryHolder right = doubleChest.getRightSide();
+
+                Location loc1 = (left instanceof BlockState) ? ((BlockState) left).getLocation() : null;
+                Location loc2 = (right instanceof BlockState) ? ((BlockState) right).getLocation() : null;
+
+                if (loc1 != null && loc2 != null) {
+                    return (loc1.getBlockX() < loc2.getBlockX() ||
+                            (loc1.getBlockX() == loc2.getBlockX() && loc1.getBlockZ() < loc2.getBlockZ()))
+                            ? loc1 : loc2;
+                }
+            }
+        }
+
         Location normalizedLoc = loc;
 
         BlockFace[] faces = new BlockFace[] {
@@ -53,13 +75,11 @@ public class TeamChestManager {
             Block neighbor = block.getRelative(face);
 
             if (neighbor.getType() == type) {
-
                 Location neighborLoc = neighbor.getLocation();
 
                 if (neighborLoc.getBlockX() < normalizedLoc.getBlockX() ||
                         (neighborLoc.getBlockX() == normalizedLoc.getBlockX() && neighborLoc.getBlockZ() < normalizedLoc.getBlockZ())) {
 
-                    // Der Nachbar ist die Hauptkiste
                     normalizedLoc = neighborLoc;
                 }
             }
@@ -92,7 +112,6 @@ public class TeamChestManager {
     }
 
     public void removeChest(Location loc) {
-        // 1. Eingangs-Location normalisieren
         Location normalizedLoc = normalizeChestLocation(loc);
         String world = normalizedLoc.getWorld().getName();
 
@@ -109,7 +128,7 @@ public class TeamChestManager {
 
         for (TeamChest chest : loadedList) {
             Location loc = chest.getChestLocation();
-            if (loc != null) {
+            if (loc != null && loc.getWorld() != null) {
                 String world = loc.getWorld().getName();
 
                 registeredChests.computeIfAbsent(world, k -> new HashMap<>())
@@ -124,9 +143,6 @@ public class TeamChestManager {
 
         List<TeamChest> chestsToSave = registeredChests.values().stream()
                 .flatMap(map -> map.values().stream())
-                .map(chest -> {
-                    return chest;
-                })
                 .collect(Collectors.toList());
 
         fileManager.saveList(chestsFile, chestsToSave);

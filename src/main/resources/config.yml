@@ -155,52 +155,32 @@ border_phases:
 # ========================================================================= #
 
 # A list of items that are neither allowed to be crafted nor used.
-# Format: MATERIAL_NAME[:DATA_VALUE] (e.g., 'GOLDEN_APPLE:1' for Enchanted Golden Apple)
 banned-items:
-  - ENDER_EYE           # Ender Eyes -> No END allowed, should be left as is
-  - SKULL:1             # Wither Skeleton Skull -> No Wither Boss
-  - GOLDEN_APPLE:1      # Enchanted Golden Apple
-  - FISHING_ROD         # Fishing Rod
+  - ENDER_EYE                    # Ender Eyes -> No END allowed, should be left as is
+  - WITHER_SKELETON_SKULL        # Wither Skeleton Skull -> No Wither Boss
+  - ENCHANTED_GOLDEN_APPLE       # Enchanted Golden Apple
+  - FISHING_ROD                  # Fishing Rod
 
 # A list of potions that are not allowed to be brewed, drunk, or thrown as Splash Potions.
-# This uses the Item IDs + Data Values from Spigot/Bukkit.
 # The list includes Base, Extended, and Tier II versions (including Splash).
+# POTIONS CONSIDERED TOO POWERFUL OR TOO ANNOYING
+# Format: [POTION_TYPE]:[IS_UPGRADED]:[IS_EXTENDED]
 banned-potions:
-  # POTIONS CONSIDERED TOO POWERFUL OR TOO ANNOYING
+  - 'POISON:false:false'   # Poison I (0:45) - (Base)
+  - 'POISON:false:true'    # Poison I (Extended 2:00)
+  - 'POISON:true:false'    # Poison II (1:00)
 
-  # POISON
-  - '8196'  # Poison I (0:45)
-  - '8260'  # Poison I (Extended 2:00)
-  - '8228'  # Poison II (1:00)
-  - '16388' # Splash Poison I (0:33)
-  - '16452' # Splash Poison I (Extended 1:30)
-  - '16420' # Splash Poison II (0:45)
+  - 'HARMING:false:false'  # Harming I (Instant)
+  - 'HARMING:true:false'   # Harming II (Instant)
 
-  # HARMING (Instant Damage)
-  - '8204'  # Harming I (Instant)
-  - '8236'  # Harming II (Instant)
-  - '16396' # Splash Harming I (Instant)
-  - '16428' # Splash Harming II (Instant)
+  - 'NIGHT_VISION:false:false' # Night Vision (3:00)
+  - 'NIGHT_VISION:false:true'  # Night Vision (Extended 8:00)
 
-  # POTIONS THAT LEAD TO UNFAIR ADVANTAGES
+  - 'WEAKNESS:false:false' # Weakness (1:30)
+  - 'WEAKNESS:false:true'  # Weakness (Extended 4:00)
 
-  # NIGHT VISION
-  - '8238'  # Night Vision (3:00)
-  - '8262'  # Night Vision (Extended 8:00)
-  - '16422' # Splash Night Vision (2:15)
-  - '16454' # Splash Night Vision (Extended 6:00)
-
-  # WEAKNESS
-  - '8232'  # Weakness (1:30)
-  - '8264'  # Weakness (Extended 4:00)
-  - '16424' # Splash Weakness (1:07)
-  - '16456' # Splash Weakness (Extended 3:00)
-
-  # SLOWNESS
-  - '8234'  # Slowness (1:30)
-  - '8266'  # Slowness (Extended 4:00)
-  - '16426' # Splash Slowness (1:07)
-  - '16458' # Splash Slowness (Extended 3:00)
+  - 'SLOWNESS:false:false' # Slowness (1:30)
+  - 'SLOWNESS:false:true'  # Slowness (Extended 4:00)
 
 # ========================================================================= #
 #                            V. GAMEPLAY SETTINGS                           #

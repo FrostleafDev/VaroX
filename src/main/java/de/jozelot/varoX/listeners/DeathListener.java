@@ -1,5 +1,6 @@
 package de.jozelot.varoX.listeners;
 
+import com.destroystokyo.paper.event.player.PlayerAdvancementCriterionGrantEvent;
 import de.jozelot.varoX.VaroX;
 import de.jozelot.varoX.files.ConfigManager;
 import de.jozelot.varoX.files.LangManager;
@@ -14,7 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerAchievementAwardedEvent;
+import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -157,7 +158,7 @@ public class DeathListener implements Listener {
             waitingForKick.add(victimUUID);
 
             for (Player player : Bukkit.getOnlinePlayers()) {
-                player.playSound(player.getLocation(), Sound.AMBIENCE_THUNDER, 1f, 1f);
+                player.playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1f, 1f);
             }
 
             new BukkitRunnable() {
@@ -186,7 +187,7 @@ public class DeathListener implements Listener {
         }
     }
     @EventHandler
-    public void onAdvancement(PlayerAchievementAwardedEvent event) {
+    public void onAdvancement(PlayerAdvancementCriterionGrantEvent event) { // SCHAUEN OB RECIHT
         if (configManager.isAdvancementsEnbaled()) {
             return;
         }

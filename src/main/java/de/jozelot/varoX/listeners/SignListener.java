@@ -8,15 +8,16 @@ import de.jozelot.varoX.teamchests.TeamChestManager;
 import de.jozelot.varoX.teams.TeamsManager;
 import de.jozelot.varoX.teams.Team;
 import org.bukkit.ChatColor;
-import org.bukkit.Location; // Hinzugefügt
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Directional; // Neue API
+import org.bukkit.block.BlockFace; // Hinzugefügt
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.material.Attachable;
-import org.bukkit.block.BlockFace;
+// import org.bukkit.material.Attachable; // Veraltet
 
 import java.util.Optional;
 
@@ -61,21 +62,15 @@ public class SignListener implements Listener {
 
         Block attachedBlock = null;
 
-        try {
-            if (event.getBlock().getState().getData() instanceof Attachable) {
-                Attachable attachable = (Attachable) event.getBlock().getState().getData();
-                BlockFace attachedFace = attachable.getAttachedFace();
+        org.bukkit.block.data.BlockData data = event.getBlock().getState().getBlockData();
+        if (data instanceof Directional) {
+            Directional directional = (Directional) data;
+            BlockFace attachedFace = directional.getFacing().getOppositeFace();
 
-                if (attachedFace != BlockFace.DOWN && attachedFace != BlockFace.UP) {
-                    attachedBlock = event.getBlock().getRelative(attachedFace);
-                }
+            if (attachedFace != BlockFace.DOWN && attachedFace != BlockFace.UP) {
+                attachedBlock = event.getBlock().getRelative(attachedFace);
             }
-        } catch (Exception e) {
-            player.sendMessage(lang.format("teamchest-fail-attach-error", null));
-            event.setCancelled(true);
-            return;
         }
-
         if (attachedBlock == null) {
             player.sendMessage(lang.format("teamchest-fail-attach-error", null));
             event.setCancelled(true);

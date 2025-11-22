@@ -21,6 +21,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class VaroCommand implements CommandExecutor {
 
@@ -543,6 +544,12 @@ public class VaroCommand implements CommandExecutor {
         config.load();
         lang.load();
         fileManager.saveFiles();
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            String header = config.getTabHeader().stream().collect(Collectors.joining("\n"));
+            String footer = config.getTabFooter().stream().collect(Collectors.joining("\n"));
+            player.setPlayerListHeaderFooter(header, footer);
+        }
     }
 
     private void sendHelpMessage(CommandSender sender) {
@@ -602,7 +609,7 @@ public class VaroCommand implements CommandExecutor {
                     Bukkit.broadcastMessage(lang.getVaroStart());
 
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        player.playSound(player.getLocation(), Sound.NOTE_PLING, 1f, 1f);
+                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f);
                     }
 
                     varoStarting = false;
@@ -621,7 +628,7 @@ public class VaroCommand implements CommandExecutor {
                     Bukkit.broadcastMessage(lang.format("varo-starting", vars));
 
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        player.playSound(player.getLocation(), Sound.NOTE_BASS, 1f, 1f);
+                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 1f);
                     }
                 }
 
