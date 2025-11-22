@@ -24,7 +24,6 @@ import java.util.*;
 public class DeathListener implements Listener {
 
     private final Map<UUID, CombatInfo> combatLog = new HashMap<>();
-    private final long TIMEOUT_SECONDS = 10; // Hinweis: Wert sollte aus Config kommen
     private final VaroX plugin;
     private final Set<UUID> waitingForKick = new HashSet<>();
     private final LangManager lang;
@@ -32,12 +31,15 @@ public class DeathListener implements Listener {
     private final TeamsManager teamsManager;
     private final ConfigManager configManager;
 
+    private final long TIMEOUT_SECONDS;
+
     public DeathListener(VaroX plugin) {
         this.plugin = plugin;
         this.lang = plugin.getLangManager();
         this.userManager = plugin.getUserManager();
         this.teamsManager = plugin.getTeamsManager();
         this.configManager = plugin.getConfigManager();
+        TIMEOUT_SECONDS = configManager.getKilledByPlayerTime();
     }
 
     private static class CombatInfo {
@@ -97,20 +99,10 @@ public class DeathListener implements Listener {
         deathStandart.put("player_name", String.valueOf(victim.getName()));
 
         String fallbackMessage = lang.format("death-standart", deathStandart);
-
         String finalDeathMessage = fallbackMessage;
 
-        Optional<User> userOptionalVictim = userManager.getUserByName(victim.getName());
-
-        if (userOptionalVictim.isPresent()) {
-            User userVictim = userOptionalVictim.get();
-            userVictim.setAlive(false);
-            userManager.updateUser(userVictim);
-        }
-        teamsManager.checkAndSetTeamStatus(victim.getName(), userManager);
-
-
-        boolean killerFound = false;
+        boolean isVaroXElimination = false;
+        boolean killedByPlayer = false;
 
         if (combatLog.containsKey(victimUUID)) {
             CombatInfo info = combatLog.get(victimUUID);
@@ -121,13 +113,14 @@ public class DeathListener implements Listener {
                 Player killer = Bukkit.getPlayer(info.getDamagerUUID());
 
                 if (killer != null && killer.isOnline()) {
+                    isVaroXElimination = true;
+                    killedByPlayer = true;
 
                     Map<String, String> deathByPlayer = new HashMap<>();
                     deathByPlayer.put("player_name", String.valueOf(victim.getName()));
                     deathByPlayer.put("killer_name", String.valueOf(killer.getName()));
 
                     Optional<User> userOptional = userManager.getUserByName(killer.getName());
-
                     if (userOptional.isPresent()) {
                         User user = userOptional.get();
                         user.addKill();
@@ -135,32 +128,49 @@ public class DeathListener implements Listener {
                     }
 
                     finalDeathMessage = lang.format("death-by-player", deathByPlayer);
-                    killerFound = true;
                 }
             }
 
             combatLog.remove(victimUUID);
         }
 
-        if (finalDeathMessage != null && !finalDeathMessage.isEmpty()) {
-            Bukkit.broadcastMessage(finalDeathMessage);
+        if (!killedByPlayer && configManager.isPlayerDeathNonPlayer()) {
+            isVaroXElimination = true;
         }
 
-        waitingForKick.add(victimUUID);
+        if (isVaroXElimination) {
+            Optional<User> userOptionalVictim = userManager.getUserByName(victim.getName());
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.playSound(player.getLocation(), Sound.AMBIENCE_THUNDER, 1f, 1f);
-        }
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (waitingForKick.contains(victimUUID)) {
-                    victim.kickPlayer(lang.getDeathKickMessage());
-                }
+            if (userOptionalVictim.isPresent()) {
+                User userVictim = userOptionalVictim.get();
+                userVictim.setAlive(false);
+                userManager.updateUser(userVictim);
             }
-        }.runTaskLater(plugin, 100L);
+
+            teamsManager.checkAndSetTeamStatus(victim.getName(), userManager);
+
+            if (finalDeathMessage != null && !finalDeathMessage.isEmpty()) {
+                Bukkit.broadcastMessage(finalDeathMessage);
+            }
+
+            // Schedule the kick
+            waitingForKick.add(victimUUID);
+
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.playSound(player.getLocation(), Sound.AMBIENCE_THUNDER, 1f, 1f);
+            }
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (waitingForKick.contains(victimUUID)) {
+                        victim.kickPlayer(lang.getDeathKickMessage());
+                    }
+                }
+            }.runTaskLater(plugin, 100L);
+        }
     }
+
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();

@@ -36,6 +36,7 @@ public class ConfigManager {
     private boolean isTeamChestsEnabled;
 
     private boolean isTabEnabled;
+    private int killedByPlayerTime;
 
     private List<String> tabHeader;
     private List<String> tabFooter;
@@ -112,6 +113,10 @@ public class ConfigManager {
         return tabFooter;
     }
 
+    public int getKilledByPlayerTime() {
+        return killedByPlayerTime;
+    }
+
     public void load() {
         plugin.saveDefaultConfig();
 
@@ -141,6 +146,8 @@ public class ConfigManager {
         isTabEnabled = plugin.getConfig().getBoolean("server-tablist-enabled");
         tabHeader = plugin.getConfig().getStringList("server-tablist-header");
         tabFooter = plugin.getConfig().getStringList("server-tablist-footer");
+
+        killedByPlayerTime = plugin.getConfig().getInt("killed-by-player-time");
     }
 
     public String getLocale() {

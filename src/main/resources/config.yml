@@ -218,6 +218,9 @@ disable-friendly-fire: true
 # will be treated as normal respawns (or a simple loss of items).
 player-out-by-non-player-death: true
 
+# The amount of time the last hit by a player on death is ago.
+killed-by-player-time: 10
+
 enable-advancements: false
 
 enable-team-chests: true
