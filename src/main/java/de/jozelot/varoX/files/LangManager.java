@@ -5,6 +5,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class LangManager {
@@ -196,11 +198,14 @@ public class LangManager {
         noTeamAvailable = format("no-team-available", null);
         notInATeam = format("not-in-team", null);
         notEnoughSpawns = format("not-enough-spawns", null);
-
     }
 
     public String get(String path) {
         return langConfig.getString(path, "§cERROR 404: String not found / Error in Lang file '" + locale + "'");
+    }
+
+    public List<String> getList(String path) {
+        return langConfig.getStringList(path);
     }
 
     public String format(String path, Map<String, String> variables) {

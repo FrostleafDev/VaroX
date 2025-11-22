@@ -214,6 +214,16 @@ public class VaroCommand implements CommandExecutor {
                 sender.sendMessage(lang.format("usage", vars));
                 return true;
             }
+            if (args[0].equalsIgnoreCase("spawn")) {
+                Map<String, String> vars = new HashMap<>();
+                vars.put("command_usage", "/varo spawn <add|remove|list>");
+                sender.sendMessage(lang.format("usage", vars));
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("help")) {
+                sendHelpMessage(sender);
+                return true;
+            }
         }
 
         if (args.length >= 2) {
@@ -536,7 +546,9 @@ public class VaroCommand implements CommandExecutor {
     }
 
     private void sendHelpMessage(CommandSender sender) {
-        sender.sendMessage("Herlp");
+        String helpMessage = String.join("\n", lang.getList("help-menu"));
+
+        sender.sendMessage(helpMessage);
     }
 
     private void startVaro() {
@@ -619,7 +631,6 @@ public class VaroCommand implements CommandExecutor {
     }
 
     private void startProtectionTimer() {
-
         varoStartProtection = true;
 
         new BukkitRunnable() {
