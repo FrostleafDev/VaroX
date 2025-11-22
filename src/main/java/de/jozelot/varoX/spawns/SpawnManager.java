@@ -52,7 +52,7 @@ public class SpawnManager {
         }
     }
 
-    public Spawn createSpawn(int id, double[] positionData) { // <-- ID als neuen Parameter hinzugefügt
+    public Spawn createSpawn(int id, double[] positionData) {
         List<Spawn> spawns = loadSpawnsFromFile();
 
         if (spawns.stream().anyMatch(spawn -> spawn.getId() == id)) {

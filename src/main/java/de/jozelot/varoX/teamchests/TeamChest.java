@@ -40,20 +40,24 @@ public class TeamChest {
     }
 
     public Location getChestLocation() {
+        if (org.bukkit.Bukkit.getWorld(worldName) == null) return null;
         Block chestBlock = org.bukkit.Bukkit.getWorld(worldName).getBlockAt(x, y, z);
         return chestBlock.getLocation();
     }
 
     public Location getSignLocation() {
+        if (org.bukkit.Bukkit.getWorld(worldName) == null) return null;
         Block signBlock = org.bukkit.Bukkit.getWorld(worldName).getBlockAt(signX, signY, signZ);
         return signBlock.getLocation();
     }
 
     public Block getChestBlock() {
+        if (org.bukkit.Bukkit.getWorld(worldName) == null) return null;
         return org.bukkit.Bukkit.getWorld(worldName).getBlockAt(x, y, z);
     }
 
     public Block getSignBlock() {
+        if (org.bukkit.Bukkit.getWorld(worldName) == null) return null;
         return org.bukkit.Bukkit.getWorld(worldName).getBlockAt(signX, signY, signZ);
     }
 }
