@@ -55,8 +55,8 @@ public class ProtectionListener implements Listener {
         Block block = event.getClickedBlock();
         Player player = event.getPlayer();
 
-        plugin.getLogger().info("--- Interact Test ---");
-        plugin.getLogger().info("Clicked Block: " + block.getType());
+        //plugin.getLogger().info("--- Interact Test ---");
+        //plugin.getLogger().info("Clicked Block: " + block.getType());
 
         if (player.getGameMode() == GameMode.CREATIVE) {
             return;
@@ -74,33 +74,33 @@ public class ProtectionListener implements Listener {
                 }
             }
 
-            plugin.getLogger().info("1. Target Location (clicked/attached): " + targetLoc.toVector());
+           // plugin.getLogger().info("1. Target Location (clicked/attached): " + targetLoc.toVector());
             Location normalizedTargetLoc = chestManager.normalizeChestLocation(targetLoc);
-            plugin.getLogger().info("2. Normalized Location: " + normalizedTargetLoc.toVector());
+           // plugin.getLogger().info("2. Normalized Location: " + normalizedTargetLoc.toVector());
 
             TeamChest chest = chestManager.getChestAt(normalizedTargetLoc);
 
             if (chest == null) {
-                plugin.getLogger().info("3. TeamChest NICHT gefunden (kein Schutz aktiv).");
-                plugin.getLogger().info("---------------------------------------------");
+             //   plugin.getLogger().info("3. TeamChest NICHT gefunden (kein Schutz aktiv).");
+             //   plugin.getLogger().info("---------------------------------------------");
                 return;
             }
 
-            plugin.getLogger().info("3. TeamChest GEVUNDEN (Team: " + chest.getTeamName() + ")");
+          //  plugin.getLogger().info("3. TeamChest GEVUNDEN (Team: " + chest.getTeamName() + ")");
 
             Optional<Team> teamOpt = teamsManager.getTeamByName(chest.getTeamNameKey());
 
             if (!teamOpt.isPresent()) {
-                plugin.getLogger().warning("Team der Truhe (" + chest.getTeamNameKey() + ") existiert nicht mehr. Zugriff erlaubt.");
-                plugin.getLogger().info("---------------------------------------------");
+         //       plugin.getLogger().warning("Team der Truhe (" + chest.getTeamNameKey() + ") existiert nicht mehr. Zugriff erlaubt.");
+          //      plugin.getLogger().info("---------------------------------------------");
                 return;
             }
 
             Team chestTeam = teamOpt.get();
 
             if (!chestTeam.isAlive()) {
-                plugin.getLogger().info("4. Team ist ausgeschieden. Zugriff für alle erlaubt.");
-                plugin.getLogger().info("---------------------------------------------");
+            //    plugin.getLogger().info("4. Team ist ausgeschieden. Zugriff für alle erlaubt.");
+           //     plugin.getLogger().info("---------------------------------------------");
                 return;
             }
 
@@ -110,14 +110,14 @@ public class ProtectionListener implements Listener {
             if (!playerTeamOpt.isPresent() || !playerTeamOpt.get().getName().equalsIgnoreCase(chest.getTeamNameKey())) {
                 event.setCancelled(true);
 
-                plugin.getLogger().warning("6. Zugriff VERWEIGERT. Event gecancelled.");
-                plugin.getLogger().info("---------------------------------------------");
+               // plugin.getLogger().warning("6. Zugriff VERWEIGERT. Event gecancelled.");
+            //    plugin.getLogger().info("---------------------------------------------");
                 Map<String, String> vars = new HashMap<>();
                 vars.put("team_name", chest.getTeamName());
                 player.sendMessage(lang.format("teamchest-access-denied", vars));
             }else {
-                plugin.getLogger().info("6. Zugriff ERLAUBT (Spieler im Team).");
-                plugin.getLogger().info("---------------------------------------------");
+              //  plugin.getLogger().info("6. Zugriff ERLAUBT (Spieler im Team).");
+             //   plugin.getLogger().info("---------------------------------------------");
             }
         }
     }

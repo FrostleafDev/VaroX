@@ -33,6 +33,9 @@
 # Your game data is safe! All critical information (Teams, Spawns, Game State)
 # is automatically saved immediately after every change to ensure maximum data safety.
 
+# You should turn on the 'is flying enabled' option in the server.propeties because
+# if not the player will be kicked if he joins back in the air.
+
 # Server Restart:
 # The server can be safely restarted during the Varo run without losing progress.
 

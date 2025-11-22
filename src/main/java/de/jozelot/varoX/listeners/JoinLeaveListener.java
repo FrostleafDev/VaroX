@@ -144,8 +144,21 @@ public class JoinLeaveListener implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
-        if (playerInJoin.contains(event.getPlayer())) {
+        if (!playerInJoin.contains(event.getPlayer())) {
+            return;
+        }
+
+        Location from = event.getFrom();
+        Location to = event.getTo();
+
+        if (from.getX() != to.getX() ||
+                from.getY() != to.getY() ||
+                from.getZ() != to.getZ()) {
+
             event.setCancelled(true);
+            from.setYaw(to.getYaw());
+            from.setPitch(to.getPitch());
+            event.getPlayer().teleport(from);
         }
     }
 
@@ -162,7 +175,7 @@ public class JoinLeaveListener implements Listener {
     }
 
     @EventHandler
-    public void onMove(FoodLevelChangeEvent event) {
+    public void onPlayerLevelChange(FoodLevelChangeEvent event) {
         if (!(event.getEntity() instanceof Player)) {
             return;
         }
