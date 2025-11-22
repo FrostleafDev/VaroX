@@ -52,10 +52,10 @@ public class JoinLeaveListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-
         if (statesManager.getGameState() == 2) {
             startJoinCooldown(event.getPlayer());
             playerInJoin.add(event.getPlayer());
+            event.setJoinMessage("");
         }
         if (statesManager.getGameState() != 2) {
             Map<String, String> vars = new HashMap<>();
@@ -73,7 +73,6 @@ public class JoinLeaveListener implements Listener {
         if (statesManager.getGameState() == 1) {
             assignSpawnToPlayer(event.getPlayer());
         }
-
         userManager.registerUser(event.getPlayer().getName());
         if (config.isTabEnabled()) {
             TabListUtil.setHeaderFooter(event.getPlayer(), config.getTabHeader(), config.getTabFooter());

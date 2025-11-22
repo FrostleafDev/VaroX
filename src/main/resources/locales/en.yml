@@ -1,0 +1,199 @@
+# ------------------------------------------------------------------------- #
+#         ___      ___ ________  ________  ________     ___    ___
+#        |\  \    /  /|\   __  \|\   __  \|\   __  \   |\  \  /  /|
+#        \ \  \  /  / | \  \|\  \ \  \|\  \ \  \|\  \  \ \  \/  / /
+#         \ \  \/  / / \ \   __  \ \   _  _\ \  \\\  \  \ \    / /
+#          \ \    / /   \ \  \ \  \ \  \\  \\ \  \\\  \  /     \/
+#           \ \__/ /     \ \__\ \__\ \__\\ _\\ \_______\/  /\   \
+#            \|__|/       \|__|\|__|\|__|\|__|\|_______/__/ /\ __\
+#                                                      |__|/ \|__|
+#
+# ------------------------------------------------------------------------- #
+# VaroX EN Locale Configuration | Developed by Frostleaf (jozelot_)
+# ------------------------------------------------------------------------- #
+
+# In every message you can use the {varo_name} variable. It is linked to the
+# 'varo-name' configuration in the 'config.yml'.
+# For your individual messages, the specific variables are listed next to them.
+
+# ========================================================================= #
+#                            I. CORE MESSAGES                               #
+# ========================================================================= #
+
+# Default message for wrong command usage. Variables: {command_usage}
+usage: '§cUsage: {command_usage}'
+
+# Message when lacking the required permission.
+no-permission: '§cYou do not have permission to do that!'
+
+# Message when a command can only be used by players.
+only-player: '§cThis command can only be used by players.'
+
+# ========================================================================= #
+#                         II. VARO GAME STATES (COMMANDS)                   #
+# ========================================================================= #
+
+### /VARO START ###
+command-varo-start-already: '§c{varo_name} is already starting.'
+command-varo-start-prephase: "§c{varo_name} is still in preparation. Use '/varo open' to open it."
+command-varo-start-running: '§c{varo_name} is already running.'
+command-varo-start-stopped: "§c{varo_name} has already ended. Use '/varo reset' to restart it."
+command-varo-start-success: '§a{varo_name} is starting!'
+command-varo-to-many-player: '§c{varo_name} cannot be started until there is at least one spawn point for every registered player.'
+command-varo-to-many-player-spawn-count: '§7Spawns: §b{spawns_count}'
+command-varo-to-many-player-player-count: '§7Players: §b{player_count}'
+
+### /VARO END ###
+command-varo-end-already: '§c{varo_name} has already ended.'
+command-varo-end-fail: '§c{varo_name} cannot be ended because it has not been started yet.'
+command-varo-end-kick: '§e{varo_name} §4was prematurely ended by an admin.'
+
+### /VARO OPEN ###
+command-varo-open-already-end: '§c{varo_name} has already ended.'
+command-varo-open-already: '§c{varo_name} is already open.'
+command-varo-open: '§a{varo_name} is now open. Players can join.'
+
+### /VARO CLOSE ###
+command-varo-close-ended: '§c{varo_name} has already ended.'
+command-varo-close-closed: '§c{varo_name} has not been opened yet.'
+command-varo-close-started: '§c{varo_name} has already started.'
+command-varo-close: '§a{varo_name} has been closed!'
+
+### /VARO RESET ###
+command-varo-reset-user: '§e{varo_name} §4was prematurely ended.'
+command-varo-reset-admin-firstline: '§e{varo_name} §4was prematurely ended and reset.'
+command-varo-reset-admin-secondline: '§cAn admin must now manually delete the 3 world folders!'
+
+### /VARO RELOAD ###
+command-varo-reload-success: '§aThe plugin was successfully reloaded!'
+
+# ========================================================================= #
+#                          III. TEAM MANAGEMENT                             #
+# ========================================================================= #
+
+### Team Add ###
+
+command-varo-team-add-created: "§aTeam §e{team_name}§a created with §e{team_size} §amembers."
+command-varo-team-add-warning: "§eWarning: The following players could not be verified and were still added (risky): §e{player_names}"
+command-varo-team-add-exists: "§cTeam §e{team_name}§c already exists."
+
+### Team Remove ###
+
+command-varo-team-remove-success: "§aTeam §e{team_name}§a (ID: §e{team_id}§a) was successfully deleted."
+command-varo-team-remove-error: "§cTeam §e{team_name}§c could not be deleted."
+command-varo-team-remove-not-found: "§cTeam §e{team_name}§c could not be deleted because it does not exist."
+
+### Add Member ###
+
+command-varo-team-addmember-already: "§c§e{player_name}§c is already in team §e{team_name}§e."
+command-varo-team-addmember-success: "§e{player_name}§a was added to team §e{team_name}§a."
+command-varo-team-addmember-not-found: "§cTeam §e{team_name}§c does not exist."
+
+### Remove Member ###
+
+command-varo-team-removemember-success: "§e{player_name}§a was removed from team §e{team_name}§a."
+command-varo-team-removemember-not-a-member: "§e{player_name}§c is not a member of team §e{team_name}§c."
+command-varo-team-removemember-not-found: "§cTeam §e{team_name}§c does not exist."
+
+### Team List ###
+command-varo-team-list-no-team: '§cNo teams have been registered yet.'
+command-varo-team-list-success-header: '§6--- Registered Teams ({team_count}) ---'
+command-varo-team-list-success-team: "§7- ID {team_id}: §b{team_name} §7[{team_member_count} members, Kills: {team_kills}, Status: {status}§7]"
+command-vao-team-list-success-footer: "§6----------------------------"
+command-varo-team-list-success-death: '§4DEAD'
+command-varo-team-list-success-alive: '§aALIVE'
+
+# ========================================================================= #
+#                          IV. SPAWN MANAGEMENT                             #
+# ========================================================================= #
+
+### Spawn Add ###
+command-varo-spawn-add-exists: "§cA spawn with ID §e{spawn_id}§c already exists."
+command-varo-spawn-add-success: "§aSpawn with ID §e{spawn_id}§a was created successfully."
+
+### Spawn Remove ###
+command-varo-spawn-remove-success: "§aSpawn with ID §e{spawn_id}§a was deleted successfully."
+command-varo-spawn-remove-not-found: "§cSpawn with ID §e{spawn_id}§c could not be deleted because it does not exist."
+
+### Spawn List ###
+command-varo-spawn-list-no-spawn: '§cNo spawns have been registered yet.'
+command-varo-spawn-list-success-header: '§6------ Registered Spawns ({spawn_count}) ------'
+command-varo-spawn-list-success-team: "§7- ID {spawn_id}: [§bX: {spawn_x}, Y: {spawn_y}, Z: {spawn_z}, YAW: {spawn_yaw}, PITCH: {spawn_pitch}§7]"
+command-varo-spawn-list-success-footer: "§6--------------------------------------------------------"
+
+# ========================================================================= #
+#                            V. GAMEPLAY & EVENTS                           #
+# ========================================================================= #
+
+### Death ###
+death-by-player: '§e{player_name} §7was killed by §e{killer_name}§7.'
+death-standart: '§e{player_name} §7has died.'
+death-kick-message: '§4You died. §cYou are now eliminated from §e{varo_name}§c!'
+
+### Join/Leave ###
+player-join: '§e{player_name} §3joined the server.'
+player-leave: '§e{player_name} §3left the server.'
+player-join-fail-closed: '§e{varo_name} §4is not open yet.'
+player-join-fail-ended: '§e{varo_name} §4is already over. §cThanks for playing!'
+player-join-fail-not-in-a-team: '§4You are not registered in a §e{varo_name} §4team and cannot join!'
+
+### Admin Info ###
+info-admin-state-prephase: '§e{varo_name} is in the preparation phase (Game State 0).'
+info-admin-state-open: '§e{varo_name} is open (Game State 1) and can now be started.'
+
+### Spawn Assignment ###
+no-spawn-available: '§cNo free spawn is available. You will be teleported to the world spawn.'
+no-team-available: '§cNo team is available.'
+not-in-team: '§eYou are not registered in a team, so you will now be listed as a spectator.'
+not-enough-spawns: '§cNot enough spawns were created. You will be teleported to the world spawn.'
+
+### Start Countdown ###
+varo-starting: '§e{varo_name} starts in {seconds} seconds.'
+varo-start: '§cLet the games begin!'
+
+### Login Protection ###
+login-10-second: '§e{player_name}§3 joined and becomes vulnerable in §e10§3 seconds.'
+login-3-2-second: '§e{player_name}§3 becomes vulnerable in §e{seconds}§3 seconds.'
+login-1-second: '§e{player_name}§3 becomes vulnerable in §e1§3 second.'
+login-finish: '§cYou are now vulnerable!'
+
+### Banned Items ###
+banned-item-alert: '§4This item is explicitly banned by {varo_name}!'
+
+### Winners ###
+winner-found-one: '§e{winner_name} has won {varo_name}'
+winner-found-two: '§e{winner_name} and {winner_name2} have won {varo_name}'
+winner-found-more: '§eTeam {team_name} has won {varo_name}'
+
+### Team Chests ###
+teamchest-success: "§aTeam chest created!"
+teamchest-removed: "§aTeam chest removed."
+teamchest-fail-not-in-team: "§cYou must be in a team to create a team chest!"
+teamchest-fail-attach-error: "§cError: The sign must be attached to a chest."
+teamchest-fail-no-chest: "§cYou can only attach team chests to actual chests!"
+teamchest-fail-already-registered: "§cThis chest is already registered as a team chest."
+teamchest-access-denied: "§cThis chest belongs to team §e{team_name}§c and cannot be opened."
+teamchest-break-denied: "§cYou are not allowed to break this team chest!"
+
+### Help Menu ###
+help-menu:
+  - "§6------ VaroX Help Menu ------"
+  - "§7- Command: §b/varo start §7- Starts the Varo."
+  - "§7- Command: §b/varo end §7- Ends the Varo."
+  - "§7- Command: §b/varo open §7- Opens the join phase (Phase 1)."
+  - "§7- Command: §b/varo close §7- Closes the join phase (Phase 0)."
+  - "§7- Command: §b/varo reset §7- Resets the Varo."
+  - "§7- Command: §b/varo reload §7- Reloads all files."
+  - ""
+  - "§6------ Team Commands (5) ------"
+  - "§7- Command: §b/varo team add <TeamName> <Player1> [Player2...] §7- Creates a team."
+  - "§7- Command: §b/varo team remove <TeamName> §7- Deletes a team."
+  - "§7- Command: §b/varo team addMember <TeamName> <PlayerName> §7- Adds a player."
+  - "§7- Command: §b/varo team removeMember <TeamName> <PlayerName> §7- Removes a player."
+  - "§7- Command: §b/varo team list §7- Shows all teams."
+  - ""
+  - "§6------ Spawn Commands (3) ------"
+  - "§7- Command: §b/varo spawn add <ID> §7- Creates a spawn."
+  - "§7- Command: §b/varo spawn remove <ID> §7- Deletes a spawn."
+  - "§7- Command: §b/varo spawn list §7- Lists all spawns."
+  - "§6------------------------------------"

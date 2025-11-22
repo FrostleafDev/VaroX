@@ -40,6 +40,9 @@ public class FileManager {
     private void saveDefaultLocales() {
         plugin.saveResource("locales/de.yml", false);
         plugin.saveResource("locales/en.yml", false);
+        plugin.saveResource("locales/fr.yml", false);
+        plugin.saveResource("locales/es.yml", false);
+        plugin.saveResource("locales/ru.yml", false);
     }
 
 

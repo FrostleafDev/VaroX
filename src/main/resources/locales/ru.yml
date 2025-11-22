@@ -1,0 +1,194 @@
+# ------------------------------------------------------------------------- #
+#         ___      ___ ________  ________  ________     ___    ___
+#        |\  \    /  /|\   __  \|\   __  \|\   __  \   |\  \  /  /|
+#        \ \  \  /  / | \  \|\  \ \  \|\  \ \  \|\  \  \ \  \/  / /
+#         \ \  \/  / / \ \   __  \ \   _  _\ \  \\\  \  \ \    / /
+#          \ \    / /   \ \  \ \  \ \  \\  \\ \  \\\  \  /     \/
+#           \ \__/ /     \ \__\ \__\ \__\\ _\\ \_______\/  /\   \
+#            \|__|/       \|__|\|__|\|__|\|__|\|_______/__/ /\ __\
+#                                                      |__|/ \|__|
+#
+# ------------------------------------------------------------------------- #
+# VaroX RU Locale Configuration | Developed by Frostleaf (jozelot_)
+# ------------------------------------------------------------------------- #
+
+# В каждом сообщении можно использовать переменную {varo_name}.
+# Она связана с параметром 'varo-name' в файле 'config.yml'.
+
+# ========================================================================= #
+#                            I. ОСНОВНЫЕ СООБЩЕНИЯ                          #
+# ========================================================================= #
+
+# Стандартное сообщение при неправильном использовании команды. Переменные: {command_usage}
+usage: '§cИспользование: {command_usage}'
+
+# Нет прав.
+no-permission: '§cУ вас нет прав для этого!'
+
+# Команда только для игроков.
+only-player: '§cЭту команду могут выполнять только игроки.'
+
+# ========================================================================= #
+#                       II. СОСТОЯНИЯ VARO (КОМАНДЫ)                        #
+# ========================================================================= #
+
+### /VARO START ###
+command-varo-start-already: '§c{varo_name} уже запускается.'
+command-varo-start-prephase: "§c{varo_name} всё ещё в подготовке. Используйте '/varo open', чтобы открыть."
+command-varo-start-running: '§c{varo_name} уже запущен.'
+command-varo-start-stopped: "§c{varo_name} уже завершён. Используйте '/varo reset', чтобы перезапустить."
+command-varo-start-success: '§a{varo_name} запускается!'
+command-varo-to-many-player: '§c{varo_name} нельзя запустить: для каждого игрока должен быть свой спавн.'
+command-varo-to-many-player-spawn-count: '§7Спавны: §b{spawns_count}'
+command-varo-to-many-player-player-count: '§7Игроки: §b{player_count}'
+
+### /VARO END ###
+command-varo-end-already: '§c{varo_name} уже завершён.'
+command-varo-end-fail: '§c{varo_name} нельзя завершить, так как он не запущен.'
+command-varo-end-kick: '§e{varo_name} §4был досрочно остановлен администратором.'
+
+### /VARO OPEN ###
+command-varo-open-already-end: '§c{varo_name} уже завершён.'
+command-varo-open-already: '§c{varo_name} уже открыт.'
+command-varo-open: '§a{varo_name} открыт. Игроки могут присоединяться.'
+
+### /VARO CLOSE ###
+command-varo-close-ended: '§c{varo_name} уже завершён.'
+command-varo-close-closed: '§c{varo_name} ещё не был открыт.'
+command-varo-close-started: '§c{varo_name} уже был запущен.'
+command-varo-close: '§a{varo_name} закрыт!'
+
+### /VARO RESET ###
+command-varo-reset-user: '§e{varo_name} §4был досрочно завершён.'
+command-varo-reset-admin-firstline: '§e{varo_name} §4был досрочно завершён и сброшен.'
+command-varo-reset-admin-secondline: '§cАдминистратору нужно вручную удалить три папки миров!'
+
+### /VARO RELOAD ###
+command-varo-reload-success: '§aПлагин успешно перезагружен!'
+
+# ========================================================================= #
+#                          III. УПРАВЛЕНИЕ КОМАНДАМИ                        #
+# ========================================================================= #
+
+### Team ADD ###
+command-varo-team-add-created: "§aКоманда §e{team_name}§a создана с §e{team_size} §aучастниками."
+command-varo-team-add-warning: "§eПредупреждение: Следующих игроков нельзя было проверить, но они были добавлены (рискованно): §e{player_names}"
+command-varo-team-add-exists: "§cКоманда §e{team_name}§c уже существует."
+
+### Team REMOVE ###
+command-varo-team-remove-success: "§aКоманда §e{team_name}§a (ID: §e{team_id}§a) успешно удалена."
+command-varo-team-remove-error: "§cКоманду §e{team_name}§c не удалось удалить."
+command-varo-team-remove-not-found: "§cКоманда §e{team_name}§c не существует."
+
+### Team ADDMEMBER ###
+command-varo-team-addmember-already: "§c§e{player_name}§c уже в команде §e{team_name}§e."
+command-varo-team-addmember-success: "§e{player_name}§a добавлен в команду §e{team_name}§a."
+command-varo-team-addmember-not-found: "§cКоманда §e{team_name}§c не существует."
+
+### Team REMOVEMEMBER ###
+command-varo-team-removemember-success: "§e{player_name}§a удалён из команды §e{team_name}§a."
+command-varo-team-removemember-not-a-member: "§e{player_name}§c не состоит в команде §e{team_name}§c."
+command-varo-team-removemember-not-found: "§cКоманда §e{team_name}§c не существует."
+
+### Team LIST ###
+command-varo-team-list-no-team: '§cКоманд ещё нет.'
+command-varo-team-list-success-header: '§6--- Зарегистрированные команды ({team_count}) ---'
+command-varo-team-list-success-team: "§7- ID {team_id}: §b{team_name} §7[{team_member_count} участников, Убийств: {team_kills}, Статус: {status}§7]"
+command-varo-team-list-success-footer: "§6----------------------------"
+command-varo-team-list-success-death: '§4МЁРТВ'
+command-varo-team-list-success-alive: '§aЖИВ'
+
+# ========================================================================= #
+#                         IV. УПРАВЛЕНИЕ СПАВНАМИ                           #
+# ========================================================================= #
+
+### Spawn ADD ###
+command-varo-spawn-add-exists: "§cСпавн с ID §e{spawn_id}§c уже существует."
+command-varo-spawn-add-success: "§aСпавн с ID §e{spawn_id}§a успешно создан."
+
+### Spawn REMOVE ###
+command-varo-spawn-remove-success: "§aСпавн с ID §e{spawn_id}§a успешно удалён."
+command-varo-spawn-remove-not-found: "§cСпавн с ID §e{spawn_id}§c не существует."
+
+### Spawn LIST ###
+command-varo-spawn-list-no-spawn: '§cСпавны ещё не созданы.'
+command-varo-spawn-list-success-header: '§6------ Зарегистрированные спавны ({spawn_count}) ------'
+command-varo-spawn-list-success-team: "§7- ID {spawn_id}: [§bX: {spawn_x}, Y: {spawn_y}, Z: {spawn_z}, YAW: {spawn_yaw}, PITCH: {spawn_pitch}§7]"
+command-varo-spawn-list-success-footer: "§6--------------------------------------------------------"
+
+# ========================================================================= #
+#                       V. ГЕЙМПЛЕЙ И ИГРОВЫЕ СОБЫТИЯ                       #
+# ========================================================================= #
+
+### Смерть ###
+death-by-player: '§e{player_name} §7был убит игроком §e{killer_name}§7.'
+death-standart: '§e{player_name} §7погиб.'
+death-kick-message: '§4Вы умерли. §cВы выбрали из §e{varo_name}§c!'
+
+### Вход/Выход ###
+player-join: '§e{player_name} §3зашёл на сервер.'
+player-leave: '§e{player_name} §3вышел с сервера.'
+player-join-fail-closed: '§e{varo_name} §4ещё не открыт.'
+player-join-fail-ended: '§e{varo_name} §4уже завершён. §cСпасибо за участие!'
+player-join-fail-not-in-a-team: '§4Вы не зарегистрированы в команде §e{varo_name}§4 и не можете войти!'
+
+### Admin-Infos ###
+info-admin-state-prephase: '§e{varo_name} находится в подготовительной фазе (Game State 0).'
+info-admin-state-open: '§e{varo_name} открыт (Game State 1) и может быть запущен.'
+
+### Назначение спавна ###
+no-spawn-available: '§cСвободных спавнов нет. Перемещение на мировой спавн.'
+no-team-available: '§cНет доступных команд.'
+not-in-team: '§eВы не в команде, теперь вы зритель.'
+not-enough-spawns: '§cНедостаточно спавнов. Перемещение на мировой спавн.'
+
+### Старт VARO ###
+varo-starting: '§e{varo_name} начнётся через {seconds} секунд.'
+varo-start: '§cДа начнутся игры!'
+
+### Защита при входе ###
+login-10-second: '§e{player_name}§3 вошёл на сервер и будет уязвим через §e10§3 секунд.'
+login-3-2-second: '§e{player_name}§3 будет уязвим через §e{seconds}§3 секунд.'
+login-1-second: '§e{player_name}§3 будет уязвим через §eодну§3 секунду.'
+login-finish: '§cТеперь вы уязвимы!'
+
+### Запрещённые предметы ###
+banned-item-alert: '§4Этот предмет запрещён правилами {varo_name}!'
+
+### Победитель ###
+winner-found-one: '§e{winner_name} выиграл {varo_name}'
+winner-found-two: '§e{winner_name} и {winner_name2} выиграли {varo_name}'
+winner-found-more: '§eКоманда {team_name} выиграла {varo_name}'
+
+### TEAM CHESTS ###
+teamchest-success: "§aКомандный сундук успешно создан!"
+teamchest-removed: "§aКомандный сундук удалён."
+teamchest-fail-not-in-team: "§cВы должны быть в команде, чтобы создать командный сундук!"
+teamchest-fail-attach-error: "§cОшибка: табличка должна быть прикреплена к сундуку."
+teamchest-fail-no-chest: "§cКомандные сундуки можно размещать только на сундуках!"
+teamchest-fail-already-registered: "§cЭтот сундук уже зарегистрирован как командный."
+teamchest-access-denied: "§cЭтот сундук принадлежит команде §e{team_name}§c. Доступ запрещён."
+teamchest-break-denied: "§cВы не можете сломать этот командный сундук!"
+
+### HELP MENU ###
+help-menu:
+  - "§6------ Меню помощи VaroX ------"
+  - "§7- Команда: §b/varo start §7- Запускает Varo."
+  - "§7- Команда: §b/varo end §7- Завершает Varo."
+  - "§7- Команда: §b/varo open §7- Открывает фазу входа (Фаза 1)."
+  - "§7- Команда: §b/varo close §7- Закрывает фазу входа (Фаза 0)."
+  - "§7- Команда: §b/varo reset §7- Сбрасывает Varo."
+  - "§7- Команда: §b/varo reload §7- Перезагружает все файлы."
+  - ""
+  - "§6------ Командные команды (5) ------"
+  - "§7- Команда: §b/varo team add <Команда> <Игрок1> [Игрок2...] §7- Создаёт команду."
+  - "§7- Команда: §b/varo team remove <Команда> §7- Удаляет команду."
+  - "§7- Команда: §b/varo team addMember <Команда> <Игрок> §7- Добавляет игрока."
+  - "§7- Команда: §b/varo team removeMember <Команда> <Игрок> §7- Удаляет игрока."
+  - "§7- Команда: §b/varo team list §7- Показывает все команды."
+  - ""
+  - "§6------ Команды спавнов (3) ------"
+  - "§7- Команда: §b/varo spawn add <ID> §7- Создаёт спавн."
+  - "§7- Команда: §b/varo spawn remove <ID> §7- Удаляет спавн."
+  - "§7- Команда: §b/varo spawn list §7- Показывает все спавны."
+  - "§6------------------------------------"
