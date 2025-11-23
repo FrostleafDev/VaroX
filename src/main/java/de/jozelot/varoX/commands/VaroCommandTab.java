@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections; // Import für Collections.emptyList() hinzugefügt
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public class VaroCommandTab implements TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String @NotNull [] args) {
 
-        if (!sender.hasPermission("varox.admin")) { return List.of(); }
+        if (!sender.hasPermission("varox.admin")) { return Collections.emptyList(); }
 
         List<String> completions = new ArrayList<>();
         String currentArg = args[args.length - 1].toLowerCase();
@@ -65,7 +66,7 @@ public class VaroCommandTab implements TabCompleter {
                     String teamSubCommand = args[1].toLowerCase();
 
                     if (teamSubCommand.equals("list")) {
-                        return List.of();
+                        return Collections.emptyList();
                     }
 
                     if (teamSubCommand.equals("remove") || teamSubCommand.equals("addmember") || teamSubCommand.equals("removemember")) {
@@ -120,12 +121,13 @@ public class VaroCommandTab implements TabCompleter {
                                 .map(String::valueOf)
                                 .filter(s -> s.startsWith(currentArg))
                                 .collect(Collectors.toList()));
-                    } else if (spawnSubCommand.equals("list")) {
-                        return List.of();
+                    }
+                    else if (spawnSubCommand.equals("list")) {
+                        return Collections.emptyList();
                     }
                 }
             } else {
-                return List.of();
+                return Collections.emptyList();
             }
         }
 

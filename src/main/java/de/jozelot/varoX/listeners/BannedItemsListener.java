@@ -39,7 +39,8 @@ public class BannedItemsListener implements Listener {
             return false;
         }
 
-        if (itemStack.getItemMeta() instanceof PotionMeta potionMeta) {
+        if (itemStack.getItemMeta() instanceof PotionMeta) {
+            PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
             PotionData potionData = potionMeta.getBasePotionData();
             PotionType type = potionData.getType();
 
@@ -126,9 +127,10 @@ public class BannedItemsListener implements Listener {
     @EventHandler
     public void onItemPickup(EntityPickupItemEvent event) {
         // EntityPickupItemEvent für moderne Spigot-Versionen
-        if (!(event.getEntity() instanceof Player player)) {
+        if (!(event.getEntity() instanceof Player)) {
             return;
         }
+        Player player = (Player) event.getEntity();
 
         ItemStack item = event.getItem().getItemStack();
 
