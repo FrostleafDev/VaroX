@@ -131,6 +131,7 @@ command-varo-team-list-success-alive: '§aALIVE'
 command-varo-spawn-add-exists: "§cEin Spawn mit ID §e{spawn_id}§c existiert bereits."
 # Variablen: {spawn_id}
 command-varo-spawn-add-success: "§aSpawn mit ID §e{spawn_id}§a wurde erfolgreich erstellt."
+command-varo-spawn-add-not-a-number: '§cDie Spawn ID muss eine Zahl sein.'
 
 ### Spawn Entfernen (REMOVE) ###
 
