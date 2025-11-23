@@ -69,6 +69,7 @@ command-varo-reload-success: '§aLe plugin a été rechargé avec succès !'
 command-varo-team-add-created: "§aL’équipe §e{team_name}§a a été créée avec §e{team_size}§a membres."
 command-varo-team-add-warning: "§eAttention : les joueurs suivants n’ont pas pu être vérifiés et ont été ajoutés quand même (risqué) : §e{player_names}"
 command-varo-team-add-exists: "§cL’équipe §e{team_name}§c existe déjà."
+command-varo-spawn-add-not-a-number: "§cL'ID du spawn doit être un nombre."
 
 ### Team REMOVE ###
 command-varo-team-remove-success: "§aL’équipe §e{team_name}§a (ID : §e{team_id}§a) a été supprimée."
