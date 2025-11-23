@@ -607,7 +607,7 @@ public class VaroCommand implements CommandExecutor {
                     Bukkit.broadcastMessage(lang.getVaroStart());
 
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        player.playSound(player.getLocation(), Sound.NOTE_PLING, 1f, 1f);
+                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 1f, 1f);
                     }
 
                     varoStarting = false;
@@ -626,7 +626,7 @@ public class VaroCommand implements CommandExecutor {
                     Bukkit.broadcastMessage(lang.format("varo-starting", vars));
 
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        player.playSound(player.getLocation(), Sound.NOTE_BASS, 1f, 1f);
+                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BASS, 1f, 1f);
                     }
                 }
 

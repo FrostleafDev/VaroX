@@ -157,7 +157,7 @@ public class DeathListener implements Listener {
             waitingForKick.add(victimUUID);
 
             for (Player player : Bukkit.getOnlinePlayers()) {
-                player.playSound(player.getLocation(), Sound.AMBIENCE_THUNDER, 1f, 1f);
+                player.playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_THUNDER, 1f, 1f);
             }
 
             new BukkitRunnable() {
