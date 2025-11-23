@@ -82,6 +82,7 @@ command-varo-team-add-created: "§aEquipo §e{team_name}§a creado con §e{team_
 command-varo-team-add-warning: "§eAviso: No se pudo verificar la existencia de los siguientes jugadores, pero fueron añadidos igualmente (arriesgado): §e{player_names}"
 # Variables: {team_name}
 command-varo-team-add-exists: "§cEl equipo §e{team_name}§c ya existe."
+command-varo-spawn-add-not-a-number: "§cEl ID del spawn debe ser numérico."
 
 ### Eliminar Equipo (REMOVE) ###
 
