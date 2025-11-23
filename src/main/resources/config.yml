@@ -68,7 +68,7 @@
 
 # The internal version number of the configuration file.
 # DO NOT change this, it is used for plugin compatibility checks.
-version: 1.0.0
+version: 1.0.1
 
 # The language to be used for all plugin messages (e.g., de or en).
 # Make sure the corresponding locale file exists (locales/de.yml).
