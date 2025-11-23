@@ -12,17 +12,22 @@ VaroX is a dedicated Hardcore PvP plugin designed to fully manage the **Varo for
 
 The plugin provides administrators with a robust and secure toolset for managing teams, game states, and world borders, all while maintaining a minimal footprint and requiring **no external dependencies**.
 
-## 2. Core Features
+## 2. Features
 
-VaroX implements the critical mechanics necessary for hosting a Varo event:
+- Banned items + potions list
+- Friendly fire option
+- Custom tablist and Motd
+- Game Phases
+- Teams, Spawns and Team chests
+- Multi local support: de, en, fr, es, ru
+- Custom worldboarder with phases
 
-* **Team and Elimination Management:** Handles team creation, player kills, strike counts, and automatic elimination of players and teams upon death.
-* **Dynamic World Border:** Features a fully integrated system for automatically reducing the world border size over configurable, sequential phases throughout the event duration.
-* **Start Protection (Grace Period):** Configurable period of invulnerability upon game start and player join, ensuring a fair initial phase.
-* **State Control:** Direct administrative control over the game status (`Open`, `Running`, `Ended`) and the ability to perform a complete system reset.
-* **Data Integrity:** All critical game and team data is saved instantly to the `data/` directory (JSON format) after every modification, guaranteeing maximum data protection against server crashes.
-* **Localization:** Includes five default languages (DE, EN, FR, ES, RU) with all messages easily customizable via dedicated `YAML` files.
-    * **Varo 4 Immersion (DE):** **The default German configuration uses the exact core messages from the Varo 4 format to ensure an authentic Varo experience.**
+### More Features will come soon:
+- Sessions
+- Strikes
+- Custom win stuff
+- Spectator support in creative and spectator
+- Admin mode with vanish, invsee etc
 
 ## 3. Compatibility and Installation
 
