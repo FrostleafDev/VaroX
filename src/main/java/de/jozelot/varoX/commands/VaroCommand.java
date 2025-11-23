@@ -423,30 +423,35 @@ public class VaroCommand implements CommandExecutor {
                         return true;
                     }
 
-                    int spawnId = Integer.parseInt(args[2]);
+                    try {
+                        int spawnId = Integer.parseInt(args[2]);
 
-                    if (spawnManager.getSpawnById(spawnId).isPresent()) {
+                        if (spawnManager.getSpawnById(spawnId).isPresent()) {
+                            Map<String, String> vars = new HashMap<>();
+                            vars.put("spawn_id", String.valueOf(spawnId));
+                            sender.sendMessage(lang.format("command-varo-spawn-add-exists", vars));
+                            return true;
+                        }
+
+                        double x = player.getLocation().getX();
+                        double y = player.getLocation().getY();
+                        double z = player.getLocation().getZ();
+
+                        double yaw = player.getLocation().getYaw();
+                        double pitch = player.getLocation().getPitch();
+
+                        double[] positionData = {x, y, z, yaw, pitch};
+
+                        spawnManager.createSpawn(spawnId, positionData);
+
                         Map<String, String> vars = new HashMap<>();
                         vars.put("spawn_id", String.valueOf(spawnId));
-                        sender.sendMessage(lang.format("command-varo-spawn-add-exists", vars));
+                        sender.sendMessage(lang.format("command-varo-spawn-add-success", vars));
+
+                    } catch (NumberFormatException e) {
+                        sender.sendMessage(lang.format("command-varo-spawn-add-not-a-number", null));
                         return true;
                     }
-
-                    double x = player.getLocation().getX();
-                    double y = player.getLocation().getY();
-                    double z = player.getLocation().getZ();
-
-                    double yaw = player.getLocation().getYaw();
-                    double pitch = player.getLocation().getPitch();
-
-                    double[] positionData = {x, y, z, yaw, pitch};
-
-                    spawnManager.createSpawn(spawnId, positionData);
-
-                    Map<String, String> vars = new HashMap<>();
-                    vars.put("spawn_id", String.valueOf(spawnId));
-                    sender.sendMessage(lang.format("command-varo-spawn-add-success", vars));
-
                     return true;
                 }
                 if (args[1].equalsIgnoreCase("remove")) {
