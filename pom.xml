@@ -6,7 +6,7 @@
 
     <groupId>de.jozelot</groupId>
     <artifactId>VaroX</artifactId>
-    <version>1.0.0-mc1.16.5</version>
+    <version>1.0.1-mc1.16.5</version>
     <packaging>jar</packaging>
 
     <name>VaroX</name>
