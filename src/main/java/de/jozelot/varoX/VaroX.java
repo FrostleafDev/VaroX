@@ -54,6 +54,7 @@ public final class VaroX extends JavaPlugin {
         getCommand("varo").setExecutor(new VaroCommand( this));
         getCommand("varo").setTabCompleter(new VaroCommandTab(this));
 
+
         // Listener Initialize
         Bukkit.getPluginManager().registerEvents(new JoinLeaveListener(this), this);
         Bukkit.getPluginManager().registerEvents(new PreGamePhaseEventBlock(this), this);

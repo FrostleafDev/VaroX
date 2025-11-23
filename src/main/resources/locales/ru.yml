@@ -105,6 +105,7 @@ command-varo-team-list-success-alive: '§aЖИВ'
 ### Spawn ADD ###
 command-varo-spawn-add-exists: "§cСпавн с ID §e{spawn_id}§c уже существует."
 command-varo-spawn-add-success: "§aСпавн с ID §e{spawn_id}§a успешно создан."
+command-varo-spawn-add-not-a-number: "§cID точки спавна должен быть числовым."
 
 ### Spawn REMOVE ###
 command-varo-spawn-remove-success: "§aСпавн с ID §e{spawn_id}§a успешно удалён."
