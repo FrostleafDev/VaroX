@@ -34,7 +34,7 @@ public final class VaroX extends JavaPlugin {
         
         getLogger().info("Setting up Listener and Commands!");
 
-        // Load Managers
+        // Load Object classes
         config = new ConfigManager(this);
         fileManager = new FileManager(this);
         lang = new LangManager(this);
@@ -86,6 +86,7 @@ public final class VaroX extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        // Beautiful shutdown message wowowowowo
         Bukkit.getConsoleSender().sendMessage("§7========== §6[ VaroX ] §7==========");
         Bukkit.getConsoleSender().sendMessage("");
         Bukkit.getConsoleSender().sendMessage("§aPlugin version: §c" + getDescription().getVersion());
